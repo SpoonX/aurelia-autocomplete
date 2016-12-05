@@ -44,7 +44,7 @@ export class AutoCompleteCustomElement {
   @bindable({defaultBindingMode: bindingMode.twoWay}) results = [];
 
   //used to determine the string to be shown as option label
-  @bindable label = result => result[this.attribute];
+  @bindable label = result => typeof result === 'object' ? result[this.attribute] : result;
 
   // allow to overwrite the default apiEndpoint
   @bindable endpoint;
@@ -197,11 +197,7 @@ export class AutoCompleteCustomElement {
    * this.selected value
    */
   onSelect(result) {
-    if (result) {
-      this.selected = result;
-    }
-
-    this.value        = this.selected;
+    this.value        = (arguments.length === 0) ? this.selected : result;
     this.results      = [];
     this.justSelected = true;
     this.search       = this.label(this.value);
