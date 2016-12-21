@@ -1,0 +1,66 @@
+{
+  "name": "aurelia-autocomplete",
+  "version": "0.0.0",
+  "description": "Skeleton plugin following spoonx conventions.",
+  "keywords": [
+    "aurelia",
+    "spoonx",
+    "plugin",
+    "dropdown",
+    "autocomplete"
+  ],
+  "homepage": "https://github.com/SpoonX/aurelia-autocomplete#readme",
+  "main": "dist/commonjs/aurelia-autocomplete.js",
+  "typings": "dist/aurelia-autocomplete.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SpoonX/aurelia-autocomplete.git"
+  },
+  "author": "SpoonX <info@spoonx.nl>",
+  "contributors": [
+    "doktordirk <doktordirk@outlook.de> (http://spoonx.nl)"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SpoonX/aurelia-autocomplete/issues"
+  },
+  "scripts": {
+    "test": "gulp test",
+    "build": "gulp build",
+    "preversion": "npm test",
+    "version": "npm run build && gulp prepare-package && git add -A dist doc/CHANGELOG.md bower.json",
+    "postpublish": "git push upstream master && git push upstream --tags"
+  },
+  "jspm": {
+    "registry": "npm",
+    "main": "aurelia-autocomplete",
+    "format": "amd",
+    "directories": {
+      "dist": "dist/amd"
+    },
+    "dependencies": {
+      "aurelia-dependency-injection": "^1.0.0",
+      "aurelia-view-manager": "^0.1.0"
+    },
+    "devDependencies": {
+      "aurelia-dependency-injection": "^1.0.0",
+      "aurelia-pal-browser": "^1.0.0",
+      "aurelia-polyfills": "^1.0.0",
+      "fetch": "github:github/fetch@^1.0.0"
+    }
+  },
+  "dependencies": {
+    "aurelia-dependency-injection": "^1.0.0"
+  },
+  "devDependencies": {
+    "spoonx-tools": "^1.0.0-0"
+  },
+  "aurelia": {
+    "build": {
+      "resources": [
+        "aurelia-autocomplete/component/autocomplete",
+        "aurelia-autocomplete/component/bootstrap/autocomplete.html"
+      ]
+    }
+  }
+}
