@@ -1,8 +1,8 @@
-import {inject, bindable, TaskQueue, bindingMode} from 'aurelia-framework';
-import {Config}                                   from 'aurelia-api';
-import {logger}                                   from '../aurelia-autocomplete';
-import {DOM}                                      from 'aurelia-pal';
-import {resolvedView}                             from 'aurelia-view-manager';
+import {computedFrom, inject, bindable, TaskQueue, bindingMode} from 'aurelia-framework';
+import {Config}                                                 from 'aurelia-api';
+import {logger}                                                 from '../aurelia-autocomplete';
+import {DOM}                                                    from 'aurelia-pal';
+import {resolvedView}                                           from 'aurelia-view-manager';
 
 @resolvedView('spoonx/auto-complete', 'autocomplete')
 @inject(DOM, Config, DOM.Element, TaskQueue)
@@ -20,11 +20,15 @@ export class AutoCompleteCustomElement {
   liEventListeners = [];
 
   //the max amount of results to return. (optional)
-  @bindable limit;
+  @bindable limit = 10;
 
   //the string that is appended to the api endpoint. e.g. api.com/language.
   //language is the resource.
   @bindable resource;
+
+  // used when one already has a list of items to filter on. Requests is not
+  // necessary
+  @bindable items;
 
   //the string to be used to do a contains search with. By default it will look
   //if the name contains this value
@@ -64,8 +68,8 @@ export class AutoCompleteCustomElement {
   }
 
   bind() {
-    if (!this.resource) {
-      return logger.error('auto complete requires resource to be defined');
+    if (!this.resource && !this.items) {
+      return logger.error('auto complete requires resource or items bindable to be defined');
     }
 
     this.apiEndpoint = this.apiEndpoint.getEndpoint(this.endpoint);
@@ -132,11 +136,9 @@ export class AutoCompleteCustomElement {
    * @returns {String}
    */
   labelWithMatches(result) {
-    return this.label(result).replace(
-      new RegExp(this.search, 'gi'),
-      match => {
-        return `<strong>${match}</strong>`;
-      });
+    return this.label(result).replace(this.regex, match => {
+      return `<strong>${match}</strong>`;
+    });
   }
 
   /**
@@ -220,6 +222,14 @@ export class AutoCompleteCustomElement {
       return;
     }
 
+    // when resource is not defined it will not perform a request. Instead it
+    // will search for the first items that pass the predicate
+    if (this.items) {
+      this.results = this.sort(this.filter(this.items));
+
+      return;
+    }
+
     return this.findResults(this.searchQuery(this.search)).then(results => {
       this.results = this.sort(results);
 
@@ -229,6 +239,45 @@ export class AutoCompleteCustomElement {
         this.showResults = true;
       }
     });
+  }
+
+  /**
+   * returns a list of length that is smaller or equal to the limit. The
+   * default predicate is based on the regex
+   *
+   * @param {Object[]} items
+   *
+   * @returns {Object[]}
+   */
+  filter(items) {
+    let results = [];
+
+    items.some(item => {
+      // add an item if it matches
+      if (this.itemMatches(item)) {
+        results.push(item);
+      }
+
+      return (results.length >= this.limit)
+    });
+
+    return results;
+  }
+
+  /**
+   * returns true when the finding of matching results should continue
+   *
+   * @param {*} item
+   *
+   * @return {Boolean}
+   */
+  itemMatches(item) {
+    return this.regex.test(this.label(item));
+  }
+
+  @computedFrom('search')
+  get regex() {
+    return new RegExp(this.search, 'gi');
   }
 
   /**
@@ -268,7 +317,7 @@ export class AutoCompleteCustomElement {
       return false;
     }
 
-    return this.search !== '';
+    return true;
   }
 
   /**
@@ -299,6 +348,8 @@ export class AutoCompleteCustomElement {
       where: mergedWhere
     };
 
+    // only assign limit to query if it is defined. Allows to default to server
+    // limit when limit bindable is set to falsy value
     if (this.limit) {
       query.limit = this.limit;
     }
