@@ -8,6 +8,8 @@ import {resolvedView}                                           from 'aurelia-vi
 @inject(DOM, Config, DOM.Element, TaskQueue)
 export class AutoCompleteCustomElement {
 
+  lastFindPromise;
+
   showResults = false;
 
   // the query string is set after selecting an option. To avoid this
@@ -213,13 +215,13 @@ export class AutoCompleteCustomElement {
    * @param {string} newValue
    * @param {string} oldValue
    *
-   * @returns {void}
+   * @returns {Promise}
    */
   searchChanged(newValue, oldValue) {
     if (!this.shouldPerformRequest()) {
       this.results = [];
 
-      return;
+      return Promise.resolve();
     }
 
     // when resource is not defined it will not perform a request. Instead it
@@ -227,10 +229,16 @@ export class AutoCompleteCustomElement {
     if (this.items) {
       this.results = this.sort(this.filter(this.items));
 
-      return;
+      return Promise.resolve();
     }
 
-    return this.findResults(this.searchQuery(this.search)).then(results => {
+    this.lastFindPromise = this.findResults(this.searchQuery(this.search)).then(results => {
+      if (this.lastFindPromise !== promise) {
+        return;
+      }
+
+      this.lastFindPromise = false;
+
       this.results = this.sort(results);
 
       if (this.results.length !== 0) {

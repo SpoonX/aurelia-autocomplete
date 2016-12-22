@@ -4,18 +4,23 @@
     <div class="form-group">
       <input
       class="form-control dropdown-toggle"
-      value.bind="search & throttle"
+      value.bind="search & debounce:100"
       placeholder="${'Search' | translate}"
       type="text"
-      id="dropdownMenu1"
+      id="autocompleteDropdown"
       data-toggle="dropdown"
       aria-haspopup="true"
       aria-expanded="true">
       </input>
     </div>
 
-    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1"
+    <ul class="dropdown-menu" aria-labelledby="autocompleteDropdown"
       show.bind="results.length > 0">
+
+      <li show.bind="lastFindPromise">
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+      </li>
+
       <template containerless
         repeat.for="result of results">
         <li
