@@ -10,8 +10,6 @@ export class AutoCompleteCustomElement {
 
   lastFindPromise;
 
-  showResults = false;
-
   // the query string is set after selecting an option. To avoid this
   // triggering a new query we set the justSelected to true. When true it will
   // avoid performing a query until it is toggled of.
@@ -154,14 +152,6 @@ export class AutoCompleteCustomElement {
     this.inputElement    = this.element.querySelectorAll('input')[0];
     this.dropdownElement = this.element.querySelectorAll('#dropdown')[0];
 
-    let openDropdown = (show = true) => {
-      this.showResults = show;
-    };
-
-    this.inputElement.addEventListener('focus', openDropdown);
-    this.inputElement.addEventListener('click', openDropdown);
-
-    this.inputElement.addEventListener('blur', () => openDropdown(false));
 
     this.registerKeyDown(this.inputElement, 'down', event => {
       this.selected = this.nextFoundResult(this.selected);
@@ -209,7 +199,6 @@ export class AutoCompleteCustomElement {
     this.results      = [];
     this.justSelected = true;
     this.search       = this.label(this.value);
-    this.showResults  = false;
   }
 
   /**
@@ -248,7 +237,6 @@ export class AutoCompleteCustomElement {
       if (this.results.length !== 0) {
         this.selected    = this.results[0];
         this.value       = this.selected;
-        this.showResults = true;
       }
     });
   }
