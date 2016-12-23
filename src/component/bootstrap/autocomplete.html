@@ -1,19 +1,16 @@
 <template>
   <div class="dropdown open">
-
-    <div class="form-group">
-      <input
-      class="form-control dropdown-toggle"
-      value.bind="search & debounce:100"
-      placeholder="${'Search' | translate}"
-      type="text"
-      id="autocompleteDropdown"
-      data-toggle="dropdown"
-      autocomplete="off"
-      aria-haspopup="true"
-      aria-expanded="true">
-      </input>
-    </div>
+    <input
+    class="form-control dropdown-toggle"
+    value.bind="search & debounce:100"
+    placeholder="${'Search' | translate}"
+    type="text"
+    id="autocompleteDropdown"
+    data-toggle="dropdown"
+    autocomplete="off"
+    aria-haspopup="true"
+    aria-expanded="true">
+    </input>
 
     <ul class="dropdown-menu" aria-labelledby="autocompleteDropdown"
       show.bind="results.length > 0">
