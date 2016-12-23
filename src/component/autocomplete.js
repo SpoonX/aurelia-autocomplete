@@ -74,6 +74,9 @@ export class AutoCompleteCustomElement {
       return logger.error('auto complete requires resource or items bindable to be defined');
     }
 
+    this.search       = this.label(this.value);
+    this.justSelected = true;
+
     this.apiEndpoint = this.apiEndpoint.getEndpoint(this.endpoint);
   }
 
@@ -131,7 +134,8 @@ export class AutoCompleteCustomElement {
   }
 
   /**
-   * returns HTML that wraps matching substrings with strong tags
+   * returns HTML that wraps matching substrings with strong tags.
+   * If not a "stringable" it returns an empty string.
    *
    * @param {Object} result
    *
