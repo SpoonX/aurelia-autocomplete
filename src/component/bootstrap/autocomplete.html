@@ -22,6 +22,7 @@
       <template containerless
         repeat.for="result of results">
         <li
+          click.delegate="onSelect(result)"
           style="cursor:pointer"
           class="${result === selected ? 'au-target active' : 'au-target'}"
           aria-expanded="true">

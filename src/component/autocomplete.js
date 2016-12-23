@@ -290,31 +290,6 @@ export class AutoCompleteCustomElement {
   }
 
   /**
-   * when the results change, add the event listeners to the li items.
-   * This has to be done because bootstrap will otherwise overrule the events
-   */
-  resultsChanged() {
-    this.removeEventListeners(this.liEventListeners);
-    this.liEventListeners = [];
-
-    this.queue.queueTask(() => {
-      this.element.querySelectorAll('li').forEach((li, index) => {
-        let clickEventFunction = () => {
-          this.onSelect(this.results[index])
-        };
-
-        li.addEventListener('click', clickEventFunction);
-
-        this.liEventListeners.push({
-          callback : clickEventFunction,
-          eventName: 'click',
-          element  : li
-        });
-      });
-    });
-  }
-
-  /**
    * returns true when a request will be performed on a search change
    *
    * @returns {Boolean}
