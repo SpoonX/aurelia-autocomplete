@@ -156,8 +156,11 @@ export class AutoCompleteCustomElement {
    */
   attached() {
     this.inputElement    = this.element.querySelectorAll('input')[0];
-    this.dropdownElement = this.element.querySelectorAll('#dropdown')[0];
+    this.dropdownElement = this.element.querySelectorAll('.dropdown.open')[0];
 
+    this.registerKeyDown(this.inputElement, '*', event => {
+      this.dropdownElement.className = 'dropdown open';
+    });
 
     this.registerKeyDown(this.inputElement, 'down', event => {
       this.selected = this.nextFoundResult(this.selected);
