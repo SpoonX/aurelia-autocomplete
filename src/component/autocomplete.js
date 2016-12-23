@@ -140,7 +140,13 @@ export class AutoCompleteCustomElement {
    * @returns {String}
    */
   labelWithMatches(result) {
-    return this.label(result).replace(this.regex, match => {
+    let label = this.label(result);
+
+    if (!label.replace) {
+      return '';
+    }
+
+    return label.replace(this.regex, match => {
       return `<strong>${match}</strong>`;
     });
   }
