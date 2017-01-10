@@ -1,11 +1,9 @@
-import {configure} from '../src/index';
+import {configure} from '../src/aurelia-autocomplete';
 
 describe('aurelia-skeleton-plugin', function() {
   describe('configure()', function() {
     it('Should call configure with a function', function() {
-      configure(()=>{
-        expect(true).toBe(true);
-      });
+      expect(typeof configure).toBe('function');
     });
   });
 });
