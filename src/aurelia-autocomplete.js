@@ -6,7 +6,7 @@
 */
 // import {AuthFilterValueConverter} from './authFilterValueConverter'; // eslint-disable-line no-unused-vars
 import {Config as ViewManager}     from 'aurelia-view-manager';
-import {AutoCompleteCustomElement} from './component/autocomplete';
+export {AutoCompleteCustomElement} from './component/autocomplete';
 import {getLogger}                 from 'aurelia-logging';
 
 export function configure(aurelia, configCallback) {
