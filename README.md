@@ -80,12 +80,16 @@ export class MyViewModel {
 
 ### Bindables
 
-#### limit;
+#### limit = 10;
 the max amount of results to return. (optional)
 
+#### items;
+used when one already has a list of items to filter on. Requests is not
+necessary.
+
 #### resource;
-the string that is appended to the api endpoint. e.g. api.com/language.
-language is the resource.
+the string that is appended to the api endpoint. e.g. `language` is the
+resource in following url `api.com/language`
 
 #### search = '';
 the string to be used to do a contains search with. By default it will look
@@ -132,6 +136,23 @@ Overwrite the default fetch. Expects to return a Promise which resolves to
 a list of results
 
 #### searchQuery(string)
+
 By default aurelia autocomplete works with waterline queries. If your query
 language differs, you can overwrite this method to return a query your endpoint
 accepts.
+
+#### filter(items)
+
+Takes items and returns only the array defined in the items bindable and should
+returns a new array containing the desired array with results.
+
+By default it makes sure to not return more items than the limit specifies.
+
+#### itemMatches(item)
+
+Used by the `this.filter` to determine if an item should be added or not.
+
+#### get regex()
+
+Returns a regex which is used for highlighting the items in the html and for
+determining if an item matches in the itemMatches method

@@ -1,14 +1,14 @@
-import {inject, bindable, TaskQueue, bindingMode} from 'aurelia-framework';
-import {Config}                                   from 'aurelia-api';
-import {logger}                                   from '../aurelia-autocomplete';
-import {DOM}                                      from 'aurelia-pal';
-import {resolvedView}                             from 'aurelia-view-manager';
+import {computedFrom, inject, bindable, TaskQueue, bindingMode} from 'aurelia-framework';
+import {Config}                                                 from 'aurelia-api';
+import {logger}                                                 from '../aurelia-autocomplete';
+import {DOM}                                                    from 'aurelia-pal';
+import {resolvedView}                                           from 'aurelia-view-manager';
 
 @resolvedView('spoonx/auto-complete', 'autocomplete')
 @inject(DOM, Config, DOM.Element, TaskQueue)
 export class AutoCompleteCustomElement {
 
-  showResults = false;
+  lastFindPromise;
 
   // the query string is set after selecting an option. To avoid this
   // triggering a new query we set the justSelected to true. When true it will
@@ -20,11 +20,15 @@ export class AutoCompleteCustomElement {
   liEventListeners = [];
 
   //the max amount of results to return. (optional)
-  @bindable limit;
+  @bindable limit = 10;
 
   //the string that is appended to the api endpoint. e.g. api.com/language.
   //language is the resource.
   @bindable resource;
+
+  // used when one already has a list of items to filter on. Requests is not
+  // necessary
+  @bindable items;
 
   //the string to be used to do a contains search with. By default it will look
   //if the name contains this value
@@ -66,9 +70,12 @@ export class AutoCompleteCustomElement {
   }
 
   bind() {
-    if (!this.resource) {
-      return logger.error('auto complete requires resource to be defined');
+    if (!this.resource && !this.items) {
+      return logger.error('auto complete requires resource or items bindable to be defined');
     }
+
+    this.search       = this.label(this.value);
+    this.justSelected = true;
 
     this.apiEndpoint = this.apiEndpoint.getEndpoint(this.endpoint);
   }
@@ -127,18 +134,23 @@ export class AutoCompleteCustomElement {
   }
 
   /**
-   * returns HTML that wraps matching substrings with strong tags
+   * returns HTML that wraps matching substrings with strong tags.
+   * If not a "stringable" it returns an empty string.
    *
    * @param {Object} result
    *
    * @returns {String}
    */
   labelWithMatches(result) {
-    return this.label(result).replace(
-      new RegExp(this.search, 'gi'),
-      match => {
-        return `<strong>${match}</strong>`;
-      });
+    let label = this.label(result);
+
+    if (!label.replace) {
+      return '';
+    }
+
+    return label.replace(this.regex, match => {
+      return `<strong>${match}</strong>`;
+    });
   }
 
   /**
@@ -146,16 +158,11 @@ export class AutoCompleteCustomElement {
    */
   attached() {
     this.inputElement    = this.element.querySelectorAll('input')[0];
-    this.dropdownElement = this.element.querySelectorAll('#dropdown')[0];
+    this.dropdownElement = this.element.querySelectorAll('.dropdown.open')[0];
 
-    let openDropdown = (show = true) => {
-      this.showResults = show;
-    };
-
-    this.inputElement.addEventListener('focus', openDropdown);
-    this.inputElement.addEventListener('click', openDropdown);
-
-    this.inputElement.addEventListener('blur', () => openDropdown(false));
+    this.registerKeyDown(this.inputElement, '*', event => {
+      this.dropdownElement.className = 'dropdown open';
+    });
 
     this.registerKeyDown(this.inputElement, 'down', event => {
       this.selected = this.nextFoundResult(this.selected);
@@ -203,7 +210,6 @@ export class AutoCompleteCustomElement {
     this.results      = [];
     this.justSelected = true;
     this.search       = this.label(this.value);
-    this.showResults  = false;
   }
 
   /**
@@ -213,49 +219,76 @@ export class AutoCompleteCustomElement {
    * @param {string} newValue
    * @param {string} oldValue
    *
-   * @returns {void}
+   * @returns {Promise}
    */
   searchChanged(newValue, oldValue) {
     if (!this.shouldPerformRequest()) {
       this.results = [];
 
-      return;
+      return Promise.resolve();
     }
 
-    return this.findResults(this.searchQuery(this.search)).then(results => {
+    // when resource is not defined it will not perform a request. Instead it
+    // will search for the first items that pass the predicate
+    if (this.items) {
+      this.results = this.sort(this.filter(this.items));
+
+      return Promise.resolve();
+    }
+
+    this.lastFindPromise = this.findResults(this.searchQuery(this.search)).then(results => {
+      if (this.lastFindPromise !== promise) {
+        return;
+      }
+
+      this.lastFindPromise = false;
+
       this.results = this.sort(results);
 
       if (this.results.length !== 0) {
         this.selected    = this.results[0];
         this.value       = this.selected;
-        this.showResults = true;
       }
     });
   }
 
   /**
-   * when the results change, add the event listeners to the li items.
-   * This has to be done because bootstrap will otherwise overrule the events
+   * returns a list of length that is smaller or equal to the limit. The
+   * default predicate is based on the regex
+   *
+   * @param {Object[]} items
+   *
+   * @returns {Object[]}
    */
-  resultsChanged() {
-    this.removeEventListeners(this.liEventListeners);
-    this.liEventListeners = [];
+  filter(items) {
+    let results = [];
 
-    this.queue.queueTask(() => {
-      this.element.querySelectorAll('li').forEach((li, index) => {
-        let clickEventFunction = () => {
-          this.onSelect(this.results[index])
-        };
+    items.some(item => {
+      // add an item if it matches
+      if (this.itemMatches(item)) {
+        results.push(item);
+      }
 
-        li.addEventListener('click', clickEventFunction);
-
-        this.liEventListeners.push({
-          callback : clickEventFunction,
-          eventName: 'click',
-          element  : li
-        });
-      });
+      return (results.length >= this.limit)
     });
+
+    return results;
+  }
+
+  /**
+   * returns true when the finding of matching results should continue
+   *
+   * @param {*} item
+   *
+   * @return {Boolean}
+   */
+  itemMatches(item) {
+    return this.regex.test(this.label(item));
+  }
+
+  @computedFrom('search')
+  get regex() {
+    return new RegExp(this.search, 'gi');
   }
 
   /**
@@ -270,7 +303,7 @@ export class AutoCompleteCustomElement {
       return false;
     }
 
-    return this.search !== '';
+    return true;
   }
 
   /**
@@ -301,6 +334,8 @@ export class AutoCompleteCustomElement {
       where: mergedWhere
     };
 
+    // only assign limit to query if it is defined. Allows to default to server
+    // limit when limit bindable is set to falsy value
     if (this.limit) {
       query.limit = this.limit;
     }
