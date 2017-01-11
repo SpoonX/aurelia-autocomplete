@@ -15,9 +15,20 @@ jspm install aurelia-autocomplete
 > simple
 
 ```html
-<auto-complete
-  resource='language'>
-</auto-complete>
+<auto-complete resource="language"></auto-complete>
+```
+
+*or if you have an array with items and thus would not need to perform
+a request*
+
+```js
+export class Page {
+  languages = [ /* languages */ ];
+}
+```
+
+```html
+<auto-complete items.bind="languages"></auto-complete>
 ```
 
 > extended
