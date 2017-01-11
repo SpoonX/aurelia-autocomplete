@@ -1,5 +1,7 @@
 # aurelia-autocomplete
 
+[![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg?maxAge=2592000?style=plastic)](https://gitter.im/SpoonX/Dev)
+
 An autocomplete component for the aurelia framework.
 
 ## Setup
