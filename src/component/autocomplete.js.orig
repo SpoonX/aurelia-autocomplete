@@ -222,7 +222,20 @@ export class AutoCompleteCustomElement {
       return;
     }
 
+<<<<<<< Updated upstream
     return this.findResults(this.searchQuery(this.search)).then(results => {
+=======
+    // when resource is not defined it will not perform a request. Instead it
+    // will search for the first items that pass the predicate
+    if (this.items) {
+      this.results = this.sort(this.filter(this.items));
+
+      return Promise.resolve();
+    }
+
+    this.findResults(this.searchQuery(this.search)).then(results => {
+
+>>>>>>> Stashed changes
       this.results = this.sort(results);
 
       if (this.results.length !== 0) {
