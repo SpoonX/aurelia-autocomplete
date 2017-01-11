@@ -1,0 +1,36 @@
+<template>
+  <div class="dropdown open">
+    <input
+    class="form-control dropdown-toggle"
+    value.bind="search & debounce:100"
+    placeholder="${'Search' | translate}"
+    type="text"
+    id="autocompleteDropdown"
+    data-toggle="dropdown"
+    autocomplete="off"
+    aria-haspopup="true"
+    aria-expanded="true">
+    </input>
+
+    <ul class="dropdown-menu" aria-labelledby="autocompleteDropdown"
+      show.bind="results.length > 0">
+
+      <li show.bind="lastFindPromise">
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+      </li>
+
+      <template containerless
+        repeat.for="result of results">
+        <li
+          click.delegate="onSelect(result)"
+          style="cursor:pointer"
+          class="${result === selected ? 'au-target active' : 'au-target'}"
+          aria-expanded="true">
+          <a href="javascript: void(0)" innerhtml.bind="labelWithMatches(result)">
+          </a>
+        </li>
+      </template>
+    </ul>
+
+  </div>
+</template>
