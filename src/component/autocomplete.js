@@ -55,7 +55,7 @@ export class AutoCompleteCustomElement {
 
   //used to determine the string to be shown as option label
   @bindable label = result => {
-    return typeof result === 'object' ? result[this.attribute] : result;
+    return (result && result[this.attribute]) || ''
   }
 
   // allow to overwrite the default apiEndpoint
@@ -150,8 +150,10 @@ export class AutoCompleteCustomElement {
   labelWithMatches(result) {
     let label = this.label(result);
 
-    if (!label.replace) {
-      return '';
+    if (typeof label !== 'string') {
+      // prevent label element to not have proper height by defining a string
+      // with space when label is not a string
+      return ' ';
     }
 
     return label.replace(this.regex, match => {
