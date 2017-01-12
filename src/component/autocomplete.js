@@ -3,6 +3,7 @@ import {Config}                                                 from 'aurelia-ap
 import {logger}                                                 from '../aurelia-autocomplete';
 import {DOM}                                                    from 'aurelia-pal';
 import {resolvedView}                                           from 'aurelia-view-manager';
+import isobject                                                 from 'isobject';
 
 @resolvedView('spoonx/auto-complete', 'autocomplete')
 @inject(DOM, Config, DOM.Element, TaskQueue)
@@ -49,7 +50,7 @@ export class AutoCompleteCustomElement {
 
   //used to determine the string to be shown as option label
   @bindable label = result => {
-    return typeof result === 'object' ? result[this.attribute] : result;
+    return isobject(result) ? result[this.attribute] : '';
   }
 
   // allow to overwrite the default apiEndpoint
@@ -144,8 +145,8 @@ export class AutoCompleteCustomElement {
   labelWithMatches(result) {
     let label = this.label(result);
 
-    if (!label.replace) {
-      return '';
+    if (typeof label !== 'string') {
+      return ' ';
     }
 
     return label.replace(this.regex, match => {
