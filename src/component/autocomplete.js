@@ -19,6 +19,12 @@ export class AutoCompleteCustomElement {
   listeners        = [];
   liEventListeners = [];
 
+  hasFocus = false;
+
+  setFocus(value) {
+    this.hasFocus = value;
+  }
+
   //the max amount of results to return. (optional)
   @bindable limit = 10;
 
