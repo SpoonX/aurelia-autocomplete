@@ -9,11 +9,12 @@
     data-toggle="dropdown"
     autocomplete="off"
     aria-haspopup="true"
+    focus.trigger="setFocus(true)"
+    blur.trigger="setFocus(false)"
     aria-expanded="true">
     </input>
 
-    <ul class="dropdown-menu" aria-labelledby="autocompleteDropdown"
-      show.bind="results.length > 0">
+    <ul show.bind="hasFocus" class="dropdown-menu" aria-labelledby="autocompleteDropdown">
 
       <li show.bind="lastFindPromise">
         <i class="fa fa-circle-o-notch fa-spin"></i>
