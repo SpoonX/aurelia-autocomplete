@@ -20,6 +20,8 @@
         <i class="fa fa-circle-o-notch fa-spin"></i>
       </li>
 
+      <li show.bind="results.length === 0" class="text-muted" t="No results">No results</li>
+
       <template containerless
         repeat.for="result of results">
         <li
