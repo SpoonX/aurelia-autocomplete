@@ -8,8 +8,10 @@
       id="autocompleteDropdown"
       autocomplete="off"
       aria-haspopup="true"
+      keydown.trigger="handleKeyDown($event)"
       focus.trigger="setFocus(true, $event)"
       blur.trigger="setFocus(false, $event)"
+
       aria-expanded="true"
     >
     </input>
@@ -44,7 +46,7 @@
       </template>
       <li if.bind="showFooter" role="separator" class="divider"></li>
       <li if.bind="showFooter" style="padding: 0 9px 4px 9px;" click.delegate="footerSelected(value)">
-        <button class="btn btn-success btn-xs btn-block">
+        <button class="btn btn-success btn-xs btn-block" blur.trigger="setFocus(false, $event)">
           <span t="${footerLabel}">${footerLabel}</span>
         </button>
       </li>

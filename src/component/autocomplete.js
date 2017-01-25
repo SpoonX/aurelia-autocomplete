@@ -16,13 +16,12 @@ export class AutoCompleteCustomElement {
   justSelected = false;
 
   // Holds the value last used to perform a search
-  previousValue = null;
-
-  // stores a list of object representations of listeners
-  listeners        = [];
-  liEventListeners = [];
+  previousValue = false;
 
   hasFocus = false;
+
+  // How many characters are required to type before starting a search.
+  @bindable minInput = 0;
 
   // The max amount of results to return. (optional)
   @bindable limit = 10;
@@ -155,6 +154,12 @@ export class AutoCompleteCustomElement {
 
     // If descendant, don't toggle dropdown so that other listeners will be called.
     if (event && event.relatedTarget && isDescendant(this.element, event.relatedTarget)) {
+      return true;
+    }
+
+    if (!this.hasEnoughCharacters()) {
+      this.hasFocus = false;
+
       return true;
     }
 
@@ -309,6 +314,12 @@ export class AutoCompleteCustomElement {
 
     this.result = null;
 
+    if (!this.hasEnoughCharacters()) {
+      this.results = [];
+
+      return Promise.resolve();
+    }
+
     // when resource is not defined it will not perform a request. Instead it
     // will search for the first items that pass the predicate
     if (this.items) {
@@ -387,6 +398,15 @@ export class AutoCompleteCustomElement {
     }
 
     return this.value !== this.previousValue;
+  }
+
+  /**
+   * Returns whether or not value has enough characters (meets minInput).
+   *
+   * @returns {boolean}
+   */
+  hasEnoughCharacters() {
+    return (this.value && this.value.length || 0) >= this.minInput;
   }
 
   /**
