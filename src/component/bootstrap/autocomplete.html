@@ -5,18 +5,16 @@
       value.bind="value & debounce:debounce"
       placeholder="${'Search' | translate}"
       type="text"
-      id="autocompleteDropdown"
       autocomplete="off"
       aria-haspopup="true"
       keydown.trigger="handleKeyDown($event)"
       focus.trigger="setFocus(true, $event)"
       blur.trigger="setFocus(false, $event)"
-
       aria-expanded="true"
     >
     </input>
 
-    <ul show.bind="hasFocus" class="dropdown-menu" aria-labelledby="autocompleteDropdown">
+    <ul show.bind="hasFocus" class="dropdown-menu">
 
       <li if.bind="lastFindPromise" style="padding: 5px 15px 0 15px;text-align: center;font-style: italic;">
         <i class="fa fa-circle-o-notch fa-spin"></i>
