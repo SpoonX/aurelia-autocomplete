@@ -171,47 +171,6 @@ export class AutoCompleteCustomElement {
   }
 
   /**
-   * Registers a event listener for the keydown.
-   *
-   * @param {Element}  element dom element
-   * @param {string}   keyName human readable key name
-   * @param {function} eventCallback to be called when event is triggered
-   */
-  registerKeyDown(element, keyName, eventCallback) {
-    let eventFunction = event => {
-      if (this.keyCodes[keyName] === event.keyCode || keyName === '*') {
-        eventCallback(event);
-      }
-    };
-
-    this.listeners.push({
-      element  : element,
-      callback : eventCallback,
-      eventName: 'keydown'
-    });
-
-    element.addEventListener('keydown', eventFunction);
-  }
-
-  /**
-   * Callback for detached.
-   */
-  detached() {
-    this.removeEventListeners(this.listeners);
-  }
-
-  /**
-   * removes event listeners from DOM
-   *
-   * @param {Object[]} listeners objects that represent a event listener
-   */
-  removeEventListeners(listeners) {
-    listeners.forEach(listener => {
-      listener.element.removeEventListener(listener.eventName, listener.callback);
-    });
-  }
-
-  /**
    * returns HTML that wraps matching substrings with strong tags.
    * If not a "stringable" it returns an empty string.
    *
@@ -232,32 +191,26 @@ export class AutoCompleteCustomElement {
   }
 
   /**
-   * Prepares the DOM by adding event listeners
+   * Handle keyDown events from value.
+   *
+   * @param {Event} event
+   *
+   * @returns {*}
    */
-  attached() {
-    this.inputElement = this.element.querySelectorAll('input')[0];
+  handleKeyDown(event) {
+    if (event.keyCode === 40 || event.keyCode === 38) {
+      this.selected = this.nextFoundResult(this.selected, event.keyCode === 38);
 
-    this.registerKeyDown(this.inputElement, '*', () => this.setFocus(true));
+      return event.preventDefault();
+    }
 
-    this.registerKeyDown(this.inputElement, 'down', event => {
-      this.selected = this.nextFoundResult(this.selected);
-      // do not move the cursor
-      event.preventDefault();
-    });
+    if (event.keyCode === 9 || event.keyCode === 13) {
+      this.onSelect();
+    } else {
+      this.setFocus(event.keyCode !== 27);
+    }
 
-    this.registerKeyDown(this.inputElement, 'up', event => {
-      this.selected = this.nextFoundResult(this.selected, true);
-      // do not move the cursor
-      event.preventDefault();
-    });
-
-    this.registerKeyDown(this.inputElement, 'enter', () => this.onSelect());
-
-    // tab closes the dropdown and jumps to the next tabable element (default behavior)
-    this.registerKeyDown(this.inputElement, 'tab', () => this.onSelect());
-
-    // tab closes the dropdown and jumps to the next tabable element (default behavior)
-    this.registerKeyDown(this.inputElement, 'esc', () => this.setFocus(false));
+    return true;
   }
 
   /**
