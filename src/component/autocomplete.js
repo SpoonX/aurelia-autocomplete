@@ -65,7 +65,7 @@ export class AutoCompleteCustomElement {
 
   // Used to determine the string to be shown as option label
   @bindable label = result => {
-    return typeof result === 'object' ? result[this.attribute] : result;
+    return typeof result === 'object' && result !== null ? result[this.attribute] : result;
   };
 
   // Allow to overwrite the default apiEndpoint
