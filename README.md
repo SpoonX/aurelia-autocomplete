@@ -119,6 +119,9 @@ Can be used to select default element visually
 #### result;
 The result object from the server, set when something was selected.
 
+#### minInput = 0;
+How many characters are required to type before starting a search.
+
 #### footerLabel = 'Create';
 The label to show in the footer. Using i18n? No problem, this automatically gets translated.
 
@@ -156,7 +159,6 @@ default.
 
 #### criteria = {};
 Used to make the criteria more specific
-
 
 ### Methods
 
