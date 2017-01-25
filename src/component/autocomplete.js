@@ -373,6 +373,23 @@ export class AutoCompleteCustomElement {
   }
 
   /**
+   * Emit custom event, or call function depending on supplied value.
+   *
+   * @param {string} value
+   */
+  onFooterSelected(value) {
+    if (typeof this.footerSelected === 'function') {
+      this.footerSelected(value);
+
+      return;
+    }
+
+    this.element.dispatchEvent(
+      DOM.createCustomEvent('footer-selected', {detail: {value}})
+    );
+  }
+
+  /**
    * Takes a string and converts to to a waterline query object that is used to
    * perform a forgiving search.
    *

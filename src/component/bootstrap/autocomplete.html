@@ -43,7 +43,7 @@
         </li>
       </template>
       <li if.bind="showFooter" role="separator" class="divider"></li>
-      <li if.bind="showFooter" style="padding: 0 9px 4px 9px;" click.delegate="footerSelected(value)">
+      <li if.bind="showFooter" style="padding: 0 9px 4px 9px;" click.trigger="onFooterSelected(value)">
         <button class="btn btn-success btn-xs btn-block" blur.trigger="setFocus(false, $event)">
           <span t="${footerLabel}">${footerLabel}</span>
         </button>
