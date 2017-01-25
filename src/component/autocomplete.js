@@ -15,15 +15,14 @@ export class AutoCompleteCustomElement {
   // avoid performing a query until it is toggled of.
   justSelected = false;
 
+  // Holds the value last used to perform a search
+  previousValue = null;
+
   // stores a list of object representations of listeners
   listeners        = [];
   liEventListeners = [];
 
   hasFocus = false;
-
-  setFocus(value) {
-    this.hasFocus = value;
-  }
 
   //the max amount of results to return. (optional)
   @bindable limit = 10;
@@ -41,7 +40,7 @@ export class AutoCompleteCustomElement {
 
   //the string to be used to do a contains search with. By default it will look
   //if the name contains this value
-  @bindable search = '';
+  @bindable({defaultBindingMode: bindingMode.twoWay}) value = '';
 
   //can be used to select default element visually
   @bindable selected;
@@ -49,8 +48,8 @@ export class AutoCompleteCustomElement {
   //the property to query on.
   @bindable attribute = 'name';
 
-  //used to pass the "selected" value to the user's view model
-  @bindable({defaultBindingMode: bindingMode.twoWay}) value = null;
+  //used to pass the result of the selected value to the user's view model
+  @bindable({defaultBindingMode: bindingMode.twoWay}) result = null;
 
   //the results returned from the endpoint. These can be observed and
   //mutated.
@@ -58,6 +57,16 @@ export class AutoCompleteCustomElement {
 
   // Which relations to populate for results
   @bindable populate = null;
+
+  // The label to show in the footer. Gets pulled through aurelia-i18n.
+  @bindable footerLabel = 'Create';
+
+  // Callback to call when the footer gets clicked.
+  @bindable footerSelected = (value) => {
+  };
+
+  // Never, always or no-results
+  @bindable footerVisibility = 'never';
 
   //used to determine the string to be shown as option label
   @bindable label = result => {
@@ -74,22 +83,6 @@ export class AutoCompleteCustomElement {
   // used to make the criteria more specific
   @bindable criteria = {};
 
-  constructor(api, element) {
-    this.element     = element;
-    this.apiEndpoint = api;
-  }
-
-  bind() {
-    if (!this.resource && !this.items) {
-      return logger.error('auto complete requires resource or items bindable to be defined');
-    }
-
-    this.search       = this.label(this.value);
-    this.justSelected = true;
-
-    this.apiEndpoint = this.apiEndpoint.getEndpoint(this.endpoint);
-  }
-
   /**
    * converts a human readable string to a event keyCode
    *
@@ -102,8 +95,71 @@ export class AutoCompleteCustomElement {
     up   : 38,
     enter: 13,
     tab  : 9,
+    esc  : 27,
     '*'  : '*'
   };
+
+  @computedFrom('results', 'value')
+  get showFooter() {
+    let visibility = this.footerVisibility;
+
+    return visibility === 'always' || (
+        visibility === 'no-results' &&
+        this.value &&
+        this.value.length &&
+        (!this.results || !this.results.length)
+      );
+  }
+
+  constructor(api, element) {
+    this.element     = element;
+    this.apiEndpoint = api;
+  }
+
+  bind() {
+    if (!this.resource && !this.items) {
+      return logger.error('auto complete requires resource or items bindable to be defined');
+    }
+
+    this.value        = this.label(this.result);
+    this.justSelected = true;
+    this.apiEndpoint  = this.apiEndpoint.getEndpoint(this.endpoint);
+  }
+
+  /**
+   * Set focus on dropdown.
+   *
+   * @param {boolean} value
+   * @param {Event}   [event]
+   *
+   * @returns {boolean}
+   */
+  setFocus(value, event) {
+    function isDescendant(parent, child) {
+      let node = child.parentNode;
+
+      while (node != null) {
+        if (node == parent) {
+          return true;
+        }
+
+        node = node.parentNode;
+      }
+
+      return false;
+    }
+
+    // If descendant, don't toggle dropdown so that other listeners will be called.
+    if (event && event.relatedTarget && isDescendant(this.element, event.relatedTarget)) {
+      return true;
+    }
+
+    if (value) {
+      this.valueChanged();
+    }
+
+    this.hasFocus = value;
+  }
 
   /**
    * registers a event listener for the keydown
@@ -167,12 +223,9 @@ export class AutoCompleteCustomElement {
    * Prepares the DOM by adding event listeners
    */
   attached() {
-    this.inputElement    = this.element.querySelectorAll('input')[0];
-    this.dropdownElement = this.element.querySelectorAll('.dropdown.open')[0];
+    this.inputElement = this.element.querySelectorAll('input')[0];
 
-    this.registerKeyDown(this.inputElement, '*', () => {
-      this.dropdownElement.className = 'dropdown open';
-    });
+    this.registerKeyDown(this.inputElement, '*', () => this.setFocus(true));
 
     this.registerKeyDown(this.inputElement, 'down', event => {
       this.selected = this.nextFoundResult(this.selected);
@@ -190,11 +243,16 @@ export class AutoCompleteCustomElement {
 
     // tab closes the dropdown and jumps to the next tabable element (default behavior)
     this.registerKeyDown(this.inputElement, 'tab', () => this.onSelect());
+
+    // tab closes the dropdown and jumps to the next tabable element (default behavior)
+    this.registerKeyDown(this.inputElement, 'esc', () => this.setFocus(false));
   }
 
   /**
-   * @param {Object} current selected item
-   * @param {Boolean} reversed when true gets the previous instead
+   * Get the next result in the list.
+   *
+   * @param {Object}  current    selected item
+   * @param {Boolean} [reversed] when true gets the previous instead
    *
    * @returns {Object} the next of previous item
    */
@@ -212,14 +270,23 @@ export class AutoCompleteCustomElement {
    * Set the text in the input to that of the selected item and set the
    * selected item as the value. Then hide the results(dropdown)
    *
-   * @param {Object} [result] when defined uses the result instead of the
-   * this.selected value
+   * @param {Object} [result] when defined uses the result instead of the this.selected value
    */
   onSelect(result) {
-    this.value        = (arguments.length === 0) ? this.selected : result;
-    this.results      = [];
-    this.justSelected = true;
-    this.search       = this.label(this.value);
+    result             = (arguments.length === 0) ? this.selected : result;
+    this.justSelected  = true;
+    this.value         = this.label(result);
+    this.previousValue = this.value;
+
+    this.setFocus(false);
+
+    // Because of the event we're in, databinding updates don't get called. Just skip a beat. :)
+    setTimeout(() => {
+      this.result   = result;
+      this.selected = this.result;
+    }, 1);
+
+    return true;
   }
 
   /**
@@ -228,12 +295,12 @@ export class AutoCompleteCustomElement {
    *
    * @returns {Promise}
    */
-  searchChanged() {
+  valueChanged() {
     if (!this.shouldPerformRequest()) {
-      this.results = [];
-
       return Promise.resolve();
     }
+
+    this.result = null;
 
     // when resource is not defined it will not perform a request. Instead it
     // will search for the first items that pass the predicate
@@ -243,20 +310,20 @@ export class AutoCompleteCustomElement {
       return Promise.resolve();
     }
 
-    let lastFindPromise = this.findResults(this.searchQuery(this.search)).then(results => {
-      if (this.lastFindPromise !== lastFindPromise) {
-        return;
-      }
+    let lastFindPromise = this.findResults(this.searchQuery(this.value))
+      .then(results => {
+        if (this.lastFindPromise !== lastFindPromise) {
+          return;
+        }
 
-      this.lastFindPromise = false;
+        this.previousValue   = this.value;
+        this.lastFindPromise = false;
+        this.results         = this.sort(results || []);
 
-      this.results = this.sort(results);
-
-      if (this.results.length !== 0) {
-        this.selected = this.results[0];
-        this.value    = this.selected;
-      }
-    });
+        if (this.results.length !== 0) {
+          this.selected = this.results[0];
+        }
+      });
 
     this.lastFindPromise = lastFindPromise;
   }
@@ -295,9 +362,9 @@ export class AutoCompleteCustomElement {
     return this.regex.test(this.label(item));
   }
 
-  @computedFrom('search')
+  @computedFrom('value')
   get regex() {
-    return new RegExp(this.search, 'gi');
+    return new RegExp(this.value, 'gi');
   }
 
   /**
@@ -312,7 +379,7 @@ export class AutoCompleteCustomElement {
       return false;
     }
 
-    return true;
+    return this.value !== this.previousValue;
   }
 
   /**

@@ -1,39 +1,53 @@
 <template>
   <div class="dropdown open">
     <input
-    class="form-control dropdown-toggle"
-    value.bind="search & debounce:debounce"
-    placeholder="${'Search' | translate}"
-    type="text"
-    id="autocompleteDropdown"
-    data-toggle="dropdown"
-    autocomplete="off"
-    aria-haspopup="true"
-    focus.trigger="setFocus(true)"
-    blur.trigger="setFocus(false)"
-    aria-expanded="true">
+      class="form-control dropdown-toggle"
+      value.bind="value & debounce:debounce"
+      placeholder="${'Search' | translate}"
+      type="text"
+      id="autocompleteDropdown"
+      autocomplete="off"
+      aria-haspopup="true"
+      focus.trigger="setFocus(true, $event)"
+      blur.trigger="setFocus(false, $event)"
+      aria-expanded="true"
+    >
     </input>
 
     <ul show.bind="hasFocus" class="dropdown-menu" aria-labelledby="autocompleteDropdown">
 
-      <li show.bind="lastFindPromise">
+      <li if.bind="lastFindPromise" style="padding: 5px 15px 0 15px;text-align: center;font-style: italic;">
         <i class="fa fa-circle-o-notch fa-spin"></i>
+        <span t="Searching">Searching</span>...
       </li>
 
-      <li show.bind="results.length === 0" class="text-muted" t="No results">No results</li>
+      <li if.bind="lastFindPromise && results.length" role="separator" class="divider"></li>
 
-      <template containerless
-        repeat.for="result of results">
+      <li
+        show.bind="results.length === 0 && !lastFindPromise"
+        class="text-muted"
+        t="No results"
+        style="padding: 5px 15px 0 15px;text-align: center;font-style: italic;"
+      >
+        <span t="No results"></span>
+      </li>
+
+      <template containerless repeat.for="result of results">
         <li
-          click.delegate="onSelect(result)"
+          click.trigger="onSelect(result)"
           style="cursor:pointer"
           class="${result === selected ? 'au-target active' : 'au-target'}"
-          aria-expanded="true">
-          <a href="javascript: void(0)" innerhtml.bind="labelWithMatches(result)">
-          </a>
+          aria-expanded="true"
+        >
+          <a href="javascript: void(0)" innerhtml.bind="labelWithMatches(result)"></a>
         </li>
       </template>
+      <li if.bind="showFooter" role="separator" class="divider"></li>
+      <li if.bind="showFooter" style="padding: 0 9px 4px 9px;" click.delegate="footerSelected(value)">
+        <button class="btn btn-success btn-xs btn-block">
+          <span t="${footerLabel}">${footerLabel}</span>
+        </button>
+      </li>
     </ul>
-
   </div>
 </template>
