@@ -44,7 +44,8 @@
       "aurelia-framework": "^1.0.8",
       "aurelia-logging": "^1.2.0",
       "aurelia-pal": "^1.2.0",
-      "aurelia-view-manager": "^0.1.0"
+      "aurelia-view-manager": "^0.1.0",
+      "isobject": "^3.0.0"
     },
     "peerDependencies": {
       "aurelia-api": "^3.1.1",
@@ -52,7 +53,8 @@
       "aurelia-framework": "^1.0.8",
       "aurelia-logging": "^1.2.0",
       "aurelia-pal": "^1.2.0",
-      "aurelia-view-manager": "^0.1.0"
+      "aurelia-view-manager": "^0.1.0",
+      "isobject": "^3.0.0"
     },
     "devDependencies": {
       "aurelia-dependency-injection": "^1.0.0",

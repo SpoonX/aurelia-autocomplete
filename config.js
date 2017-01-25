@@ -16,6 +16,7 @@ System.config({
     "aurelia-polyfills": "npm:aurelia-polyfills@1.0.0",
     "aurelia-view-manager": "npm:aurelia-view-manager@0.1.0",
     "fetch": "github:github/fetch@1.0.0",
+    "isobject": "npm:isobject@3.0.0",
     "npm:aurelia-api@3.1.1": {
       "aurelia-dependency-injection": "npm:aurelia-dependency-injection@1.2.1",
       "aurelia-fetch-client": "npm:aurelia-fetch-client@1.1.0",
