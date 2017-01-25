@@ -1,11 +1,11 @@
-import {computedFrom, inject, bindable, TaskQueue, bindingMode} from 'aurelia-framework';
-import {Config}                                                 from 'aurelia-api';
-import {logger}                                                 from '../aurelia-autocomplete';
-import {DOM}                                                    from 'aurelia-pal';
-import {resolvedView}                                           from 'aurelia-view-manager';
+import {computedFrom, inject, bindable, bindingMode} from "aurelia-framework";
+import {Config} from "aurelia-api";
+import {logger} from "../aurelia-autocomplete";
+import {DOM} from "aurelia-pal";
+import {resolvedView} from "aurelia-view-manager";
 
 @resolvedView('spoonx/auto-complete', 'autocomplete')
-@inject(DOM, Config, DOM.Element, TaskQueue)
+@inject(Config, DOM.Element)
 export class AutoCompleteCustomElement {
 
   lastFindPromise;
@@ -56,10 +56,13 @@ export class AutoCompleteCustomElement {
   //mutated.
   @bindable({defaultBindingMode: bindingMode.twoWay}) results = [];
 
+  // Which relations to populate for results
+  @bindable populate = null;
+
   //used to determine the string to be shown as option label
   @bindable label = result => {
     return typeof result === 'object' ? result[this.attribute] : result;
-  }
+  };
 
   // allow to overwrite the default apiEndpoint
   @bindable endpoint;
@@ -71,10 +74,8 @@ export class AutoCompleteCustomElement {
   // used to make the criteria more specific
   @bindable criteria = {};
 
-  constructor(dom, api, element, queue) {
-    this.queue       = queue;
+  constructor(api, element) {
     this.element     = element;
-    this.dom         = dom;
     this.apiEndpoint = api;
   }
 
@@ -102,7 +103,7 @@ export class AutoCompleteCustomElement {
     enter: 13,
     tab  : 9,
     '*'  : '*'
-  }
+  };
 
   /**
    * registers a event listener for the keydown
@@ -169,7 +170,7 @@ export class AutoCompleteCustomElement {
     this.inputElement    = this.element.querySelectorAll('input')[0];
     this.dropdownElement = this.element.querySelectorAll('.dropdown.open')[0];
 
-    this.registerKeyDown(this.inputElement, '*', event => {
+    this.registerKeyDown(this.inputElement, '*', () => {
       this.dropdownElement.className = 'dropdown open';
     });
 
@@ -225,12 +226,9 @@ export class AutoCompleteCustomElement {
    * when search string changes perform a request, assign it to results
    * and select the first result by default.
    *
-   * @param {string} newValue
-   * @param {string} oldValue
-   *
    * @returns {Promise}
    */
-  searchChanged(newValue, oldValue) {
+  searchChanged() {
     if (!this.shouldPerformRequest()) {
       this.results = [];
 
@@ -255,8 +253,8 @@ export class AutoCompleteCustomElement {
       this.results = this.sort(results);
 
       if (this.results.length !== 0) {
-        this.selected    = this.results[0];
-        this.value       = this.selected;
+        this.selected = this.results[0];
+        this.value    = this.selected;
       }
     });
 
@@ -342,7 +340,8 @@ export class AutoCompleteCustomElement {
     );
 
     let query = {
-      where: mergedWhere
+      populate: this.populate || 'null',
+      where   : mergedWhere
     };
 
     // only assign limit to query if it is defined. Allows to default to server
