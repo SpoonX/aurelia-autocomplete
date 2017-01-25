@@ -83,7 +83,6 @@ export class MyViewModel {
     selected.bind="selected"
     value.two-way="value"
     result.two-way="value"
-    result.bind="product"
     attribute="productName"
     results.bind="results"
     limit="5"
