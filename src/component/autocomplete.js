@@ -181,7 +181,7 @@ export class AutoCompleteCustomElement {
   labelWithMatches(result) {
     let label = this.label(result);
 
-    if (!label.replace) {
+    if (typeof label !== 'string') {
       return '';
     }
 
