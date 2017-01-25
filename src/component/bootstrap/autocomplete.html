@@ -27,7 +27,7 @@
         show.bind="results.length === 0 && !lastFindPromise"
         class="text-muted"
         t="No results"
-        style="padding: 5px 15px 0 15px;text-align: center;font-style: italic;"
+        style="padding: 5px 15px ${showFooter ? 0 : 5}px 15px;text-align: center;font-style: italic;"
       >
         <span t="No results"></span>
       </li>
