@@ -120,6 +120,15 @@ Can be used to select default element visually
 #### result;
 The result object from the server, set when something was selected.
 
+#### footerLabel = 'Create';
+The label to show in the footer. Using i18n? No problem, this automatically gets translated.
+
+#### footerVisibility = 'never';
+When to show the footer. Possible values are `never`, `always` an `no-results`.
+
+#### footerSelected = (value) => {};
+Callback that gets called with the selected value when the footer gets clicked.
+
 #### debounce = 100;
 Configure debounce value for user input.
 
