@@ -92,45 +92,50 @@ export class MyViewModel {
 ### Bindables
 
 #### limit = 10;
-the max amount of results to return. (optional)
+The max amount of results to return. (optional)
 
 #### items;
-used when one already has a list of items to filter on. Requests is not
+Used when one already has a list of items to filter on. Requests is not
 necessary.
 
 #### resource;
-the string that is appended to the api endpoint. e.g. `language` is the
+The string that is appended to the api endpoint. e.g. `language` is the
 resource in following url `api.com/language`
 
 #### search = '';
-the string to be used to do a contains search with. By default it will look
+The string to be used to do a contains search with. By default it will look
 if the name contains this value
 
 #### selected;
-can be used to select default element visually
+Can be used to select default element visually
+
+#### debounce
+
+#### populate
+Which relations to populate for results.
 
 #### attribute = 'name';
-the property to query on.
+The property to query on.
 
 #### ({defaultBindingMode: bindingMode.twoWay}) value = null;
-used to pass the "selected" value to the user's view model
+Used to pass the "selected" value to the user's view model
 
 #### ({defaultBindingMode: bindingMode.twoWay}) results = [];
-the results returned from the endpoint. These can be observed and
+The results returned from the endpoint. These can be observed and
 mutated.
 
 #### label = result => result[this.attribute];
-used to determine the string to be shown as option label
+Used to determine the string to be shown as option label
 
 #### endpoint;
-allow to overwrite the default api endpoint
+Allow to overwrite the default api endpoint
 
 #### sort = items => items;
-sort method that takes a list and returns a sorted list. No sorting by
+Sort method that takes a list and returns a sorted list. No sorting by
 default.
 
 #### criteria = {};
-used to make the criteria more specific
+Used to make the criteria more specific
 
 
 ### Methods
@@ -139,7 +144,7 @@ Some methods might be handy to overwrite or wrap.
 
 #### shouldPerformRequest()
 
-when it returns true, a request will be performed on a search change.
+When it returns true, a request will be performed on a search change.
 
 #### findResults(query)
 
