@@ -28,6 +28,9 @@ export class AutoCompleteCustomElement {
   //the max amount of results to return. (optional)
   @bindable limit = 10;
 
+  // Debounce value
+  @bindable debounce = 100;
+
   //the string that is appended to the api endpoint. e.g. api.com/language.
   //language is the resource.
   @bindable resource;
@@ -242,8 +245,8 @@ export class AutoCompleteCustomElement {
       return Promise.resolve();
     }
 
-    this.lastFindPromise = this.findResults(this.searchQuery(this.search)).then(results => {
-      if (this.lastFindPromise !== promise) {
+    let lastFindPromise = this.findResults(this.searchQuery(this.search)).then(results => {
+      if (this.lastFindPromise !== lastFindPromise) {
         return;
       }
 
@@ -256,6 +259,8 @@ export class AutoCompleteCustomElement {
         this.value       = this.selected;
       }
     });
+
+    this.lastFindPromise = lastFindPromise;
   }
 
   /**
