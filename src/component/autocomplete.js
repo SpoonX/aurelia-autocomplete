@@ -24,35 +24,31 @@ export class AutoCompleteCustomElement {
 
   hasFocus = false;
 
-  //the max amount of results to return. (optional)
+  // The max amount of results to return. (optional)
   @bindable limit = 10;
 
   // Debounce value
   @bindable debounce = 100;
 
-  //the string that is appended to the api endpoint. e.g. api.com/language.
-  //language is the resource.
+  // The string that is appended to the api endpoint. e.g. api.com/language. language is the resource.
   @bindable resource;
 
-  // used when one already has a list of items to filter on. Requests is not
-  // necessary
+  // Used when one already has a list of items to filter on. Requests is not necessary
   @bindable items;
 
-  //the string to be used to do a contains search with. By default it will look
-  //if the name contains this value
+  // The string to be used to do a contains search with. By default it will look if the name contains this value.
   @bindable({defaultBindingMode: bindingMode.twoWay}) value = '';
 
-  //can be used to select default element visually
+  // Can be used to select default element visually
   @bindable selected;
 
-  //the property to query on.
+  // The property to query on.
   @bindable attribute = 'name';
 
-  //used to pass the result of the selected value to the user's view model
+  // Used to pass the result of the selected value to the user's view model
   @bindable({defaultBindingMode: bindingMode.twoWay}) result = null;
 
-  //the results returned from the endpoint. These can be observed and
-  //mutated.
+  // The results returned from the endpoint. These can be observed and mutated.
   @bindable({defaultBindingMode: bindingMode.twoWay}) results = [];
 
   // Which relations to populate for results
@@ -68,19 +64,18 @@ export class AutoCompleteCustomElement {
   // Never, always or no-results
   @bindable footerVisibility = 'never';
 
-  //used to determine the string to be shown as option label
+  // Used to determine the string to be shown as option label
   @bindable label = result => {
     return typeof result === 'object' ? result[this.attribute] : result;
   };
 
-  // allow to overwrite the default apiEndpoint
+  // Allow to overwrite the default apiEndpoint
   @bindable endpoint;
 
-  // sort method that takes a list and returns a sorted list. No sorting by
-  // default.
+  // Sort method that takes a list and returns a sorted list. No sorting by default.
   @bindable sort = items => items;
 
-  // used to make the criteria more specific
+  // Used to make the criteria more specific
   @bindable criteria = {};
 
   /**
@@ -111,11 +106,20 @@ export class AutoCompleteCustomElement {
       );
   }
 
+  /**
+   * Autocomplete constructor.
+   *
+   * @param {Config}  api
+   * @param {Element} element
+   */
   constructor(api, element) {
     this.element     = element;
     this.apiEndpoint = api;
   }
 
+  /**
+   * Bind callback.
+   */
   bind() {
     if (!this.resource && !this.items) {
       return logger.error('auto complete requires resource or items bindable to be defined');
@@ -162,7 +166,7 @@ export class AutoCompleteCustomElement {
   }
 
   /**
-   * registers a event listener for the keydown
+   * Registers a event listener for the keydown.
    *
    * @param {Element}  element dom element
    * @param {string}   keyName human readable key name
@@ -184,6 +188,9 @@ export class AutoCompleteCustomElement {
     element.addEventListener('keydown', eventFunction);
   }
 
+  /**
+   * Callback for detached.
+   */
   detached() {
     this.removeEventListeners(this.listeners);
   }
