@@ -109,9 +109,10 @@ if the name contains this value
 #### selected;
 Can be used to select default element visually
 
-#### debounce
+#### debounce = 100
+Configure debounce value for user input.
 
-#### populate
+#### populate = null
 Which relations to populate for results.
 
 #### attribute = 'name';
