@@ -1,3 +1,20 @@
+<a name="0.2.0"></a>
+# [0.2.0](https://github.com/SpoonX/aurelia-autocomplete/compare/v0.1.0...v0.2.0) (2017-01-25)
+
+
+### Bug Fixes
+
+* **component:** always shows dropdown when input has focus ([0e6881b](https://github.com/SpoonX/aurelia-autocomplete/commit/0e6881b))
+* **component:** store in variable for comparing ([fb7e42b](https://github.com/SpoonX/aurelia-autocomplete/commit/fb7e42b))
+
+
+### Features
+
+* **component:** allow passing in of bindable debounce ([baf9d70](https://github.com/SpoonX/aurelia-autocomplete/commit/baf9d70))
+* **component:** show no results feedback ([5d6b461](https://github.com/SpoonX/aurelia-autocomplete/commit/5d6b461))
+
+
+
 <a name="0.1.0"></a>
 # 0.1.0 (2017-01-11)
 

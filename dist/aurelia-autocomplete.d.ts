@@ -28,7 +28,10 @@ export declare class AutoCompleteCustomElement {
   // stores a list of object representations of listeners
   listeners: any;
   liEventListeners: any;
+  hasFocus: any;
+  setFocus(value?: any): any;
   limit: any;
+  debounce: any;
   resource: any;
   items: any;
   search: any;

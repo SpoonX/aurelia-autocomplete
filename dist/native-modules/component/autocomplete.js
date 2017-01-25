@@ -7,7 +7,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _dec, _dec2, _dec3, _dec4, _dec5, _class, _desc, _value, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12;
+var _dec, _dec2, _dec3, _dec4, _dec5, _class, _desc, _value, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13;
 
 var _aureliaFramework = require('aurelia-framework');
 
@@ -65,36 +65,43 @@ function _initializerWarningHelper(descriptor, context) {
 }
 
 var AutoCompleteCustomElement = exports.AutoCompleteCustomElement = (_dec = (0, _aureliaViewManager.resolvedView)('spoonx/auto-complete', 'autocomplete'), _dec2 = (0, _aureliaFramework.inject)(_aureliaPal.DOM, _aureliaApi.Config, _aureliaPal.DOM.Element, _aureliaFramework.TaskQueue), _dec3 = (0, _aureliaFramework.bindable)({ defaultBindingMode: _aureliaFramework.bindingMode.twoWay }), _dec4 = (0, _aureliaFramework.bindable)({ defaultBindingMode: _aureliaFramework.bindingMode.twoWay }), _dec5 = (0, _aureliaFramework.computedFrom)('search'), _dec(_class = _dec2(_class = (_class2 = function () {
+  AutoCompleteCustomElement.prototype.setFocus = function setFocus(value) {
+    this.hasFocus = value;
+  };
+
   function AutoCompleteCustomElement(dom, api, element, queue) {
     
 
     this.justSelected = false;
     this.listeners = [];
     this.liEventListeners = [];
+    this.hasFocus = false;
 
     _initDefineProp(this, 'limit', _descriptor, this);
 
-    _initDefineProp(this, 'resource', _descriptor2, this);
+    _initDefineProp(this, 'debounce', _descriptor2, this);
 
-    _initDefineProp(this, 'items', _descriptor3, this);
+    _initDefineProp(this, 'resource', _descriptor3, this);
 
-    _initDefineProp(this, 'search', _descriptor4, this);
+    _initDefineProp(this, 'items', _descriptor4, this);
 
-    _initDefineProp(this, 'selected', _descriptor5, this);
+    _initDefineProp(this, 'search', _descriptor5, this);
 
-    _initDefineProp(this, 'attribute', _descriptor6, this);
+    _initDefineProp(this, 'selected', _descriptor6, this);
 
-    _initDefineProp(this, 'value', _descriptor7, this);
+    _initDefineProp(this, 'attribute', _descriptor7, this);
 
-    _initDefineProp(this, 'results', _descriptor8, this);
+    _initDefineProp(this, 'value', _descriptor8, this);
 
-    _initDefineProp(this, 'label', _descriptor9, this);
+    _initDefineProp(this, 'results', _descriptor9, this);
 
-    _initDefineProp(this, 'endpoint', _descriptor10, this);
+    _initDefineProp(this, 'label', _descriptor10, this);
 
-    _initDefineProp(this, 'sort', _descriptor11, this);
+    _initDefineProp(this, 'endpoint', _descriptor11, this);
 
-    _initDefineProp(this, 'criteria', _descriptor12, this);
+    _initDefineProp(this, 'sort', _descriptor12, this);
+
+    _initDefineProp(this, 'criteria', _descriptor13, this);
 
     this.keyCodes = {
       down: 40,
@@ -224,8 +231,8 @@ var AutoCompleteCustomElement = exports.AutoCompleteCustomElement = (_dec = (0, 
       return Promise.resolve();
     }
 
-    this.lastFindPromise = this.findResults(this.searchQuery(this.search)).then(function (results) {
-      if (_this3.lastFindPromise !== promise) {
+    var lastFindPromise = this.findResults(this.searchQuery(this.search)).then(function (results) {
+      if (_this3.lastFindPromise !== lastFindPromise) {
         return;
       }
 
@@ -238,6 +245,8 @@ var AutoCompleteCustomElement = exports.AutoCompleteCustomElement = (_dec = (0, 
         _this3.value = _this3.selected;
       }
     });
+
+    this.lastFindPromise = lastFindPromise;
   };
 
   AutoCompleteCustomElement.prototype.filter = function filter(items) {
@@ -305,36 +314,41 @@ var AutoCompleteCustomElement = exports.AutoCompleteCustomElement = (_dec = (0, 
   initializer: function initializer() {
     return 10;
   }
-}), _descriptor2 = _applyDecoratedDescriptor(_class2.prototype, 'resource', [_aureliaFramework.bindable], {
+}), _descriptor2 = _applyDecoratedDescriptor(_class2.prototype, 'debounce', [_aureliaFramework.bindable], {
+  enumerable: true,
+  initializer: function initializer() {
+    return 100;
+  }
+}), _descriptor3 = _applyDecoratedDescriptor(_class2.prototype, 'resource', [_aureliaFramework.bindable], {
   enumerable: true,
   initializer: null
-}), _descriptor3 = _applyDecoratedDescriptor(_class2.prototype, 'items', [_aureliaFramework.bindable], {
+}), _descriptor4 = _applyDecoratedDescriptor(_class2.prototype, 'items', [_aureliaFramework.bindable], {
   enumerable: true,
   initializer: null
-}), _descriptor4 = _applyDecoratedDescriptor(_class2.prototype, 'search', [_aureliaFramework.bindable], {
+}), _descriptor5 = _applyDecoratedDescriptor(_class2.prototype, 'search', [_aureliaFramework.bindable], {
   enumerable: true,
   initializer: function initializer() {
     return '';
   }
-}), _descriptor5 = _applyDecoratedDescriptor(_class2.prototype, 'selected', [_aureliaFramework.bindable], {
+}), _descriptor6 = _applyDecoratedDescriptor(_class2.prototype, 'selected', [_aureliaFramework.bindable], {
   enumerable: true,
   initializer: null
-}), _descriptor6 = _applyDecoratedDescriptor(_class2.prototype, 'attribute', [_aureliaFramework.bindable], {
+}), _descriptor7 = _applyDecoratedDescriptor(_class2.prototype, 'attribute', [_aureliaFramework.bindable], {
   enumerable: true,
   initializer: function initializer() {
     return 'name';
   }
-}), _descriptor7 = _applyDecoratedDescriptor(_class2.prototype, 'value', [_dec3], {
+}), _descriptor8 = _applyDecoratedDescriptor(_class2.prototype, 'value', [_dec3], {
   enumerable: true,
   initializer: function initializer() {
     return null;
   }
-}), _descriptor8 = _applyDecoratedDescriptor(_class2.prototype, 'results', [_dec4], {
+}), _descriptor9 = _applyDecoratedDescriptor(_class2.prototype, 'results', [_dec4], {
   enumerable: true,
   initializer: function initializer() {
     return [];
   }
-}), _descriptor9 = _applyDecoratedDescriptor(_class2.prototype, 'label', [_aureliaFramework.bindable], {
+}), _descriptor10 = _applyDecoratedDescriptor(_class2.prototype, 'label', [_aureliaFramework.bindable], {
   enumerable: true,
   initializer: function initializer() {
     var _this5 = this;
@@ -343,17 +357,17 @@ var AutoCompleteCustomElement = exports.AutoCompleteCustomElement = (_dec = (0, 
       return (typeof result === 'undefined' ? 'undefined' : _typeof(result)) === 'object' ? result[_this5.attribute] : result;
     };
   }
-}), _descriptor10 = _applyDecoratedDescriptor(_class2.prototype, 'endpoint', [_aureliaFramework.bindable], {
+}), _descriptor11 = _applyDecoratedDescriptor(_class2.prototype, 'endpoint', [_aureliaFramework.bindable], {
   enumerable: true,
   initializer: null
-}), _descriptor11 = _applyDecoratedDescriptor(_class2.prototype, 'sort', [_aureliaFramework.bindable], {
+}), _descriptor12 = _applyDecoratedDescriptor(_class2.prototype, 'sort', [_aureliaFramework.bindable], {
   enumerable: true,
   initializer: function initializer() {
     return function (items) {
       return items;
     };
   }
-}), _descriptor12 = _applyDecoratedDescriptor(_class2.prototype, 'criteria', [_aureliaFramework.bindable], {
+}), _descriptor13 = _applyDecoratedDescriptor(_class2.prototype, 'criteria', [_aureliaFramework.bindable], {
   enumerable: true,
   initializer: function initializer() {
     return {};

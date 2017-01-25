@@ -3,7 +3,7 @@
 System.register(['aurelia-framework', 'aurelia-api', '../aurelia-autocomplete', 'aurelia-pal', 'aurelia-view-manager'], function (_export, _context) {
   "use strict";
 
-  var computedFrom, inject, bindable, TaskQueue, bindingMode, Config, logger, DOM, resolvedView, _typeof, _createClass, _dec, _dec2, _dec3, _dec4, _dec5, _class, _desc, _value, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, AutoCompleteCustomElement;
+  var computedFrom, inject, bindable, TaskQueue, bindingMode, Config, logger, DOM, resolvedView, _typeof, _createClass, _dec, _dec2, _dec3, _dec4, _dec5, _class, _desc, _value, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13, AutoCompleteCustomElement;
 
   function _initDefineProp(target, property, descriptor, context) {
     if (!descriptor) return;
@@ -92,36 +92,43 @@ System.register(['aurelia-framework', 'aurelia-api', '../aurelia-autocomplete', 
       }();
 
       _export('AutoCompleteCustomElement', AutoCompleteCustomElement = (_dec = resolvedView('spoonx/auto-complete', 'autocomplete'), _dec2 = inject(DOM, Config, DOM.Element, TaskQueue), _dec3 = bindable({ defaultBindingMode: bindingMode.twoWay }), _dec4 = bindable({ defaultBindingMode: bindingMode.twoWay }), _dec5 = computedFrom('search'), _dec(_class = _dec2(_class = (_class2 = function () {
+        AutoCompleteCustomElement.prototype.setFocus = function setFocus(value) {
+          this.hasFocus = value;
+        };
+
         function AutoCompleteCustomElement(dom, api, element, queue) {
           
 
           this.justSelected = false;
           this.listeners = [];
           this.liEventListeners = [];
+          this.hasFocus = false;
 
           _initDefineProp(this, 'limit', _descriptor, this);
 
-          _initDefineProp(this, 'resource', _descriptor2, this);
+          _initDefineProp(this, 'debounce', _descriptor2, this);
 
-          _initDefineProp(this, 'items', _descriptor3, this);
+          _initDefineProp(this, 'resource', _descriptor3, this);
 
-          _initDefineProp(this, 'search', _descriptor4, this);
+          _initDefineProp(this, 'items', _descriptor4, this);
 
-          _initDefineProp(this, 'selected', _descriptor5, this);
+          _initDefineProp(this, 'search', _descriptor5, this);
 
-          _initDefineProp(this, 'attribute', _descriptor6, this);
+          _initDefineProp(this, 'selected', _descriptor6, this);
 
-          _initDefineProp(this, 'value', _descriptor7, this);
+          _initDefineProp(this, 'attribute', _descriptor7, this);
 
-          _initDefineProp(this, 'results', _descriptor8, this);
+          _initDefineProp(this, 'value', _descriptor8, this);
 
-          _initDefineProp(this, 'label', _descriptor9, this);
+          _initDefineProp(this, 'results', _descriptor9, this);
 
-          _initDefineProp(this, 'endpoint', _descriptor10, this);
+          _initDefineProp(this, 'label', _descriptor10, this);
 
-          _initDefineProp(this, 'sort', _descriptor11, this);
+          _initDefineProp(this, 'endpoint', _descriptor11, this);
 
-          _initDefineProp(this, 'criteria', _descriptor12, this);
+          _initDefineProp(this, 'sort', _descriptor12, this);
+
+          _initDefineProp(this, 'criteria', _descriptor13, this);
 
           this.keyCodes = {
             down: 40,
@@ -251,8 +258,8 @@ System.register(['aurelia-framework', 'aurelia-api', '../aurelia-autocomplete', 
             return Promise.resolve();
           }
 
-          this.lastFindPromise = this.findResults(this.searchQuery(this.search)).then(function (results) {
-            if (_this3.lastFindPromise !== promise) {
+          var lastFindPromise = this.findResults(this.searchQuery(this.search)).then(function (results) {
+            if (_this3.lastFindPromise !== lastFindPromise) {
               return;
             }
 
@@ -265,6 +272,8 @@ System.register(['aurelia-framework', 'aurelia-api', '../aurelia-autocomplete', 
               _this3.value = _this3.selected;
             }
           });
+
+          this.lastFindPromise = lastFindPromise;
         };
 
         AutoCompleteCustomElement.prototype.filter = function filter(items) {
@@ -332,36 +341,41 @@ System.register(['aurelia-framework', 'aurelia-api', '../aurelia-autocomplete', 
         initializer: function initializer() {
           return 10;
         }
-      }), _descriptor2 = _applyDecoratedDescriptor(_class2.prototype, 'resource', [bindable], {
+      }), _descriptor2 = _applyDecoratedDescriptor(_class2.prototype, 'debounce', [bindable], {
+        enumerable: true,
+        initializer: function initializer() {
+          return 100;
+        }
+      }), _descriptor3 = _applyDecoratedDescriptor(_class2.prototype, 'resource', [bindable], {
         enumerable: true,
         initializer: null
-      }), _descriptor3 = _applyDecoratedDescriptor(_class2.prototype, 'items', [bindable], {
+      }), _descriptor4 = _applyDecoratedDescriptor(_class2.prototype, 'items', [bindable], {
         enumerable: true,
         initializer: null
-      }), _descriptor4 = _applyDecoratedDescriptor(_class2.prototype, 'search', [bindable], {
+      }), _descriptor5 = _applyDecoratedDescriptor(_class2.prototype, 'search', [bindable], {
         enumerable: true,
         initializer: function initializer() {
           return '';
         }
-      }), _descriptor5 = _applyDecoratedDescriptor(_class2.prototype, 'selected', [bindable], {
+      }), _descriptor6 = _applyDecoratedDescriptor(_class2.prototype, 'selected', [bindable], {
         enumerable: true,
         initializer: null
-      }), _descriptor6 = _applyDecoratedDescriptor(_class2.prototype, 'attribute', [bindable], {
+      }), _descriptor7 = _applyDecoratedDescriptor(_class2.prototype, 'attribute', [bindable], {
         enumerable: true,
         initializer: function initializer() {
           return 'name';
         }
-      }), _descriptor7 = _applyDecoratedDescriptor(_class2.prototype, 'value', [_dec3], {
+      }), _descriptor8 = _applyDecoratedDescriptor(_class2.prototype, 'value', [_dec3], {
         enumerable: true,
         initializer: function initializer() {
           return null;
         }
-      }), _descriptor8 = _applyDecoratedDescriptor(_class2.prototype, 'results', [_dec4], {
+      }), _descriptor9 = _applyDecoratedDescriptor(_class2.prototype, 'results', [_dec4], {
         enumerable: true,
         initializer: function initializer() {
           return [];
         }
-      }), _descriptor9 = _applyDecoratedDescriptor(_class2.prototype, 'label', [bindable], {
+      }), _descriptor10 = _applyDecoratedDescriptor(_class2.prototype, 'label', [bindable], {
         enumerable: true,
         initializer: function initializer() {
           var _this5 = this;
@@ -370,17 +384,17 @@ System.register(['aurelia-framework', 'aurelia-api', '../aurelia-autocomplete', 
             return (typeof result === 'undefined' ? 'undefined' : _typeof(result)) === 'object' ? result[_this5.attribute] : result;
           };
         }
-      }), _descriptor10 = _applyDecoratedDescriptor(_class2.prototype, 'endpoint', [bindable], {
+      }), _descriptor11 = _applyDecoratedDescriptor(_class2.prototype, 'endpoint', [bindable], {
         enumerable: true,
         initializer: null
-      }), _descriptor11 = _applyDecoratedDescriptor(_class2.prototype, 'sort', [bindable], {
+      }), _descriptor12 = _applyDecoratedDescriptor(_class2.prototype, 'sort', [bindable], {
         enumerable: true,
         initializer: function initializer() {
           return function (items) {
             return items;
           };
         }
-      }), _descriptor12 = _applyDecoratedDescriptor(_class2.prototype, 'criteria', [bindable], {
+      }), _descriptor13 = _applyDecoratedDescriptor(_class2.prototype, 'criteria', [bindable], {
         enumerable: true,
         initializer: function initializer() {
           return {};

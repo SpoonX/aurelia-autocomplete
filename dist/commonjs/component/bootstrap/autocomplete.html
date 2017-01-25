@@ -2,22 +2,25 @@
   <div class="dropdown open">
     <input
     class="form-control dropdown-toggle"
-    value.bind="search & debounce:100"
+    value.bind="search & debounce:debounce"
     placeholder="${'Search' | translate}"
     type="text"
     id="autocompleteDropdown"
     data-toggle="dropdown"
     autocomplete="off"
     aria-haspopup="true"
+    focus.trigger="setFocus(true)"
+    blur.trigger="setFocus(false)"
     aria-expanded="true">
     </input>
 
-    <ul class="dropdown-menu" aria-labelledby="autocompleteDropdown"
-      show.bind="results.length > 0">
+    <ul show.bind="hasFocus" class="dropdown-menu" aria-labelledby="autocompleteDropdown">
 
       <li show.bind="lastFindPromise">
         <i class="fa fa-circle-o-notch fa-spin"></i>
       </li>
+
+      <li show.bind="results.length === 0" class="text-muted" t="No results">No results</li>
 
       <template containerless
         repeat.for="result of results">
