@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
-System.register(['aurelia-framework', 'aurelia-api', '../aurelia-autocomplete', 'aurelia-pal', 'aurelia-view-manager'], function (_export, _context) {
+System.register(["aurelia-framework", "aurelia-api", "../aurelia-autocomplete", "aurelia-pal", "aurelia-view-manager"], function (_export, _context) {
   "use strict";
 
-  var computedFrom, inject, bindable, TaskQueue, bindingMode, Config, logger, DOM, resolvedView, _typeof, _createClass, _dec, _dec2, _dec3, _dec4, _dec5, _class, _desc, _value, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13, AutoCompleteCustomElement;
+  var computedFrom, inject, bindable, bindingMode, Config, logger, DOM, resolvedView, _typeof, _createClass, _dec, _dec2, _dec3, _dec4, _dec5, _class, _desc, _value, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13, _descriptor14, AutoCompleteCustomElement;
 
   function _initDefineProp(target, property, descriptor, context) {
     if (!descriptor) return;
@@ -55,7 +55,6 @@ System.register(['aurelia-framework', 'aurelia-api', '../aurelia-autocomplete', 
       computedFrom = _aureliaFramework.computedFrom;
       inject = _aureliaFramework.inject;
       bindable = _aureliaFramework.bindable;
-      TaskQueue = _aureliaFramework.TaskQueue;
       bindingMode = _aureliaFramework.bindingMode;
     }, function (_aureliaApi) {
       Config = _aureliaApi.Config;
@@ -91,12 +90,12 @@ System.register(['aurelia-framework', 'aurelia-api', '../aurelia-autocomplete', 
         };
       }();
 
-      _export('AutoCompleteCustomElement', AutoCompleteCustomElement = (_dec = resolvedView('spoonx/auto-complete', 'autocomplete'), _dec2 = inject(DOM, Config, DOM.Element, TaskQueue), _dec3 = bindable({ defaultBindingMode: bindingMode.twoWay }), _dec4 = bindable({ defaultBindingMode: bindingMode.twoWay }), _dec5 = computedFrom('search'), _dec(_class = _dec2(_class = (_class2 = function () {
+      _export("AutoCompleteCustomElement", AutoCompleteCustomElement = (_dec = resolvedView('spoonx/auto-complete', 'autocomplete'), _dec2 = inject(Config, DOM.Element), _dec3 = bindable({ defaultBindingMode: bindingMode.twoWay }), _dec4 = bindable({ defaultBindingMode: bindingMode.twoWay }), _dec5 = computedFrom('search'), _dec(_class = _dec2(_class = (_class2 = function () {
         AutoCompleteCustomElement.prototype.setFocus = function setFocus(value) {
           this.hasFocus = value;
         };
 
-        function AutoCompleteCustomElement(dom, api, element, queue) {
+        function AutoCompleteCustomElement(api, element) {
           
 
           this.justSelected = false;
@@ -104,31 +103,33 @@ System.register(['aurelia-framework', 'aurelia-api', '../aurelia-autocomplete', 
           this.liEventListeners = [];
           this.hasFocus = false;
 
-          _initDefineProp(this, 'limit', _descriptor, this);
+          _initDefineProp(this, "limit", _descriptor, this);
 
-          _initDefineProp(this, 'debounce', _descriptor2, this);
+          _initDefineProp(this, "debounce", _descriptor2, this);
 
-          _initDefineProp(this, 'resource', _descriptor3, this);
+          _initDefineProp(this, "resource", _descriptor3, this);
 
-          _initDefineProp(this, 'items', _descriptor4, this);
+          _initDefineProp(this, "items", _descriptor4, this);
 
-          _initDefineProp(this, 'search', _descriptor5, this);
+          _initDefineProp(this, "search", _descriptor5, this);
 
-          _initDefineProp(this, 'selected', _descriptor6, this);
+          _initDefineProp(this, "selected", _descriptor6, this);
 
-          _initDefineProp(this, 'attribute', _descriptor7, this);
+          _initDefineProp(this, "attribute", _descriptor7, this);
 
-          _initDefineProp(this, 'value', _descriptor8, this);
+          _initDefineProp(this, "value", _descriptor8, this);
 
-          _initDefineProp(this, 'results', _descriptor9, this);
+          _initDefineProp(this, "results", _descriptor9, this);
 
-          _initDefineProp(this, 'label', _descriptor10, this);
+          _initDefineProp(this, "populate", _descriptor10, this);
 
-          _initDefineProp(this, 'endpoint', _descriptor11, this);
+          _initDefineProp(this, "label", _descriptor11, this);
 
-          _initDefineProp(this, 'sort', _descriptor12, this);
+          _initDefineProp(this, "endpoint", _descriptor12, this);
 
-          _initDefineProp(this, 'criteria', _descriptor13, this);
+          _initDefineProp(this, "sort", _descriptor13, this);
+
+          _initDefineProp(this, "criteria", _descriptor14, this);
 
           this.keyCodes = {
             down: 40,
@@ -138,9 +139,7 @@ System.register(['aurelia-framework', 'aurelia-api', '../aurelia-autocomplete', 
             '*': '*'
           };
 
-          this.queue = queue;
           this.element = element;
-          this.dom = dom;
           this.apiEndpoint = api;
         }
 
@@ -191,7 +190,7 @@ System.register(['aurelia-framework', 'aurelia-api', '../aurelia-autocomplete', 
           }
 
           return label.replace(this.regex, function (match) {
-            return '<strong>' + match + '</strong>';
+            return "<strong>" + match + "</strong>";
           });
         };
 
@@ -201,7 +200,7 @@ System.register(['aurelia-framework', 'aurelia-api', '../aurelia-autocomplete', 
           this.inputElement = this.element.querySelectorAll('input')[0];
           this.dropdownElement = this.element.querySelectorAll('.dropdown.open')[0];
 
-          this.registerKeyDown(this.inputElement, '*', function (event) {
+          this.registerKeyDown(this.inputElement, '*', function () {
             _this2.dropdownElement.className = 'dropdown open';
           });
 
@@ -243,7 +242,7 @@ System.register(['aurelia-framework', 'aurelia-api', '../aurelia-autocomplete', 
           this.search = this.label(this.value);
         };
 
-        AutoCompleteCustomElement.prototype.searchChanged = function searchChanged(newValue, oldValue) {
+        AutoCompleteCustomElement.prototype.searchChanged = function searchChanged() {
           var _this3 = this;
 
           if (!this.shouldPerformRequest()) {
@@ -318,6 +317,7 @@ System.register(['aurelia-framework', 'aurelia-api', '../aurelia-autocomplete', 
           var mergedWhere = Object.assign((_Object$assign = {}, _Object$assign[this.attribute] = { contains: string }, _Object$assign), this.criteria);
 
           var query = {
+            populate: this.populate || 'null',
             where: mergedWhere
           };
 
@@ -329,79 +329,84 @@ System.register(['aurelia-framework', 'aurelia-api', '../aurelia-autocomplete', 
         };
 
         _createClass(AutoCompleteCustomElement, [{
-          key: 'regex',
+          key: "regex",
           get: function get() {
             return new RegExp(this.search, 'gi');
           }
         }]);
 
         return AutoCompleteCustomElement;
-      }(), (_descriptor = _applyDecoratedDescriptor(_class2.prototype, 'limit', [bindable], {
+      }(), (_descriptor = _applyDecoratedDescriptor(_class2.prototype, "limit", [bindable], {
         enumerable: true,
         initializer: function initializer() {
           return 10;
         }
-      }), _descriptor2 = _applyDecoratedDescriptor(_class2.prototype, 'debounce', [bindable], {
+      }), _descriptor2 = _applyDecoratedDescriptor(_class2.prototype, "debounce", [bindable], {
         enumerable: true,
         initializer: function initializer() {
           return 100;
         }
-      }), _descriptor3 = _applyDecoratedDescriptor(_class2.prototype, 'resource', [bindable], {
+      }), _descriptor3 = _applyDecoratedDescriptor(_class2.prototype, "resource", [bindable], {
         enumerable: true,
         initializer: null
-      }), _descriptor4 = _applyDecoratedDescriptor(_class2.prototype, 'items', [bindable], {
+      }), _descriptor4 = _applyDecoratedDescriptor(_class2.prototype, "items", [bindable], {
         enumerable: true,
         initializer: null
-      }), _descriptor5 = _applyDecoratedDescriptor(_class2.prototype, 'search', [bindable], {
+      }), _descriptor5 = _applyDecoratedDescriptor(_class2.prototype, "search", [bindable], {
         enumerable: true,
         initializer: function initializer() {
           return '';
         }
-      }), _descriptor6 = _applyDecoratedDescriptor(_class2.prototype, 'selected', [bindable], {
+      }), _descriptor6 = _applyDecoratedDescriptor(_class2.prototype, "selected", [bindable], {
         enumerable: true,
         initializer: null
-      }), _descriptor7 = _applyDecoratedDescriptor(_class2.prototype, 'attribute', [bindable], {
+      }), _descriptor7 = _applyDecoratedDescriptor(_class2.prototype, "attribute", [bindable], {
         enumerable: true,
         initializer: function initializer() {
           return 'name';
         }
-      }), _descriptor8 = _applyDecoratedDescriptor(_class2.prototype, 'value', [_dec3], {
+      }), _descriptor8 = _applyDecoratedDescriptor(_class2.prototype, "value", [_dec3], {
         enumerable: true,
         initializer: function initializer() {
           return null;
         }
-      }), _descriptor9 = _applyDecoratedDescriptor(_class2.prototype, 'results', [_dec4], {
+      }), _descriptor9 = _applyDecoratedDescriptor(_class2.prototype, "results", [_dec4], {
         enumerable: true,
         initializer: function initializer() {
           return [];
         }
-      }), _descriptor10 = _applyDecoratedDescriptor(_class2.prototype, 'label', [bindable], {
+      }), _descriptor10 = _applyDecoratedDescriptor(_class2.prototype, "populate", [bindable], {
+        enumerable: true,
+        initializer: function initializer() {
+          return null;
+        }
+      }), _descriptor11 = _applyDecoratedDescriptor(_class2.prototype, "label", [bindable], {
         enumerable: true,
         initializer: function initializer() {
           var _this5 = this;
 
           return function (result) {
-            return (typeof result === 'undefined' ? 'undefined' : _typeof(result)) === 'object' ? result[_this5.attribute] : result;
+            return (typeof result === "undefined" ? "undefined" : _typeof(result)) === 'object' ? result[_this5.attribute] : result;
           };
         }
-      }), _descriptor11 = _applyDecoratedDescriptor(_class2.prototype, 'endpoint', [bindable], {
+      }), _descriptor12 = _applyDecoratedDescriptor(_class2.prototype, "endpoint", [bindable], {
         enumerable: true,
         initializer: null
-      }), _descriptor12 = _applyDecoratedDescriptor(_class2.prototype, 'sort', [bindable], {
+      }), _descriptor13 = _applyDecoratedDescriptor(_class2.prototype, "sort", [bindable], {
         enumerable: true,
         initializer: function initializer() {
           return function (items) {
             return items;
           };
         }
-      }), _descriptor13 = _applyDecoratedDescriptor(_class2.prototype, 'criteria', [bindable], {
+      }), _descriptor14 = _applyDecoratedDescriptor(_class2.prototype, "criteria", [bindable], {
         enumerable: true,
         initializer: function initializer() {
           return {};
         }
-      }), _applyDecoratedDescriptor(_class2.prototype, 'regex', [_dec5], Object.getOwnPropertyDescriptor(_class2.prototype, 'regex'), _class2.prototype)), _class2)) || _class) || _class));
+      }), _applyDecoratedDescriptor(_class2.prototype, "regex", [_dec5], Object.getOwnPropertyDescriptor(_class2.prototype, "regex"), _class2.prototype)), _class2)) || _class) || _class));
 
-      _export('AutoCompleteCustomElement', AutoCompleteCustomElement);
+      _export("AutoCompleteCustomElement", AutoCompleteCustomElement);
     }
   };
 });

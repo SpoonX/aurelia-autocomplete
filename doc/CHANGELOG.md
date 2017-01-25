@@ -1,3 +1,8 @@
+<a name="1.0.0"></a>
+# [1.0.0](https://github.com/SpoonX/aurelia-autocomplete/compare/v0.2.0...v1.0.0) (2017-01-25)
+
+
+
 <a name="0.2.0"></a>
 # [0.2.0](https://github.com/SpoonX/aurelia-autocomplete/compare/v0.1.0...v0.2.0) (2017-01-25)
 

@@ -1,6 +1,6 @@
 import {Config as ViewManager,resolvedView} from 'aurelia-view-manager';
 import {getLogger} from 'aurelia-logging';
-import {computedFrom,inject,bindable,TaskQueue,bindingMode} from 'aurelia-framework';
+import {computedFrom,inject,bindable,bindingMode} from 'aurelia-framework';
 import {Config} from 'aurelia-api';
 import {DOM} from 'aurelia-pal';
 
@@ -39,11 +39,12 @@ export declare class AutoCompleteCustomElement {
   attribute: any;
   value: any;
   results: any;
+  populate: any;
   label: any;
   endpoint: any;
   sort: any;
   criteria: any;
-  constructor(dom?: any, api?: any, element?: any, queue?: any);
+  constructor(api?: any, element?: any);
   bind(): any;
   
   /**
@@ -108,12 +109,9 @@ export declare class AutoCompleteCustomElement {
      * when search string changes perform a request, assign it to results
      * and select the first result by default.
      *
-     * @param {string} newValue
-     * @param {string} oldValue
-     *
      * @returns {Promise}
      */
-  searchChanged(newValue?: any, oldValue?: any): any;
+  searchChanged(): any;
   
   /**
      * returns a list of length that is smaller or equal to the limit. The
