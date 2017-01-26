@@ -16,7 +16,10 @@ export class AutoCompleteCustomElement {
   justSelected = false;
 
   // Holds the value last used to perform a search
-  previousValue = false;
+  previousValue = null;
+
+  // Simple property that maintains if this is the initial (first) request.
+  initial = true;
 
   hasFocus = false;
 
@@ -125,7 +128,6 @@ export class AutoCompleteCustomElement {
     }
 
     this.value        = this.label(this.result);
-    this.justSelected = true;
     this.apiEndpoint  = this.apiEndpoint.getEndpoint(this.endpoint);
   }
 
@@ -348,6 +350,12 @@ export class AutoCompleteCustomElement {
       this.justSelected = false;
 
       return false;
+    }
+
+    if (this.initial) {
+      this.initial = false;
+
+      return true;
     }
 
     return this.value !== this.previousValue;
