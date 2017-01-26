@@ -127,8 +127,8 @@ export class AutoCompleteCustomElement {
       return logger.error('auto complete requires resource or items bindable to be defined');
     }
 
-    this.value        = this.label(this.result);
-    this.apiEndpoint  = this.apiEndpoint.getEndpoint(this.endpoint);
+    this.value       = this.label(this.result);
+    this.apiEndpoint = this.apiEndpoint.getEndpoint(this.endpoint);
   }
 
   /**
@@ -244,14 +244,10 @@ export class AutoCompleteCustomElement {
     this.justSelected  = true;
     this.value         = this.label(result);
     this.previousValue = this.value;
+    this.result        = result;
+    this.selected      = this.result;
 
     this.setFocus(false);
-
-    // Because of the event we're in, databinding updates don't get called. Just skip a beat. :)
-    setTimeout(() => {
-      this.result   = result;
-      this.selected = this.result;
-    }, 1);
 
     return true;
   }
