@@ -25,27 +25,30 @@ export declare class AutoCompleteCustomElement {
   // avoid performing a query until it is toggled of.
   justSelected: any;
   
-  // stores a list of object representations of listeners
-  listeners: any;
-  liEventListeners: any;
+  // Holds the value last used to perform a search
+  previousValue: any;
+  
+  // Simple property that maintains if this is the initial (first) request.
+  initial: any;
   hasFocus: any;
-  setFocus(value?: any): any;
+  minInput: any;
   limit: any;
   debounce: any;
   resource: any;
   items: any;
-  search: any;
+  value: any;
   selected: any;
   attribute: any;
-  value: any;
+  result: any;
   results: any;
   populate: any;
+  footerLabel: any;
+  footerSelected: any;
+  footerVisibility: any;
   label: any;
   endpoint: any;
   sort: any;
   criteria: any;
-  constructor(api?: any, element?: any);
-  bind(): any;
   
   /**
      * converts a human readable string to a event keyCode
@@ -55,23 +58,32 @@ export declare class AutoCompleteCustomElement {
      * @returns {number} which matches the keyCode
      */
   keyCodes: any;
+  showFooter: any;
   
   /**
-     * registers a event listener for the keydown
+     * Autocomplete constructor.
      *
-     * @param {Element}  element dom element
-     * @param {string}   keyName human readable key name
-     * @param {function} eventCallback to be called when event is triggered
+     * @param {Config}  api
+     * @param {Element} element
      */
-  registerKeyDown(element?: any, keyName?: any, eventCallback?: any): any;
-  detached(): any;
+  constructor(api?: any, element?: any);
   
   /**
-     * removes event listeners from DOM
+     * Bind callback.
      *
-     * @param {Object[]} listeners objects that represent a event listener
+     * @returns {void}
      */
-  removeEventListeners(listeners?: any): any;
+  bind(): any;
+  
+  /**
+     * Set focus on dropdown.
+     *
+     * @param {boolean} value
+     * @param {Event}   [event]
+     *
+     * @returns {boolean}
+     */
+  setFocus(value?: any, event?: any): any;
   
   /**
      * returns HTML that wraps matching substrings with strong tags.
@@ -84,13 +96,19 @@ export declare class AutoCompleteCustomElement {
   labelWithMatches(result?: any): any;
   
   /**
-     * Prepares the DOM by adding event listeners
+     * Handle keyDown events from value.
+     *
+     * @param {Event} event
+     *
+     * @returns {*}
      */
-  attached(): any;
+  handleKeyDown(event?: any): any;
   
   /**
-     * @param {Object} current selected item
-     * @param {Boolean} reversed when true gets the previous instead
+     * Get the next result in the list.
+     *
+     * @param {Object}  current    selected item
+     * @param {Boolean} [reversed] when true gets the previous instead
      *
      * @returns {Object} the next of previous item
      */
@@ -100,8 +118,9 @@ export declare class AutoCompleteCustomElement {
      * Set the text in the input to that of the selected item and set the
      * selected item as the value. Then hide the results(dropdown)
      *
-     * @param {Object} [result] when defined uses the result instead of the
-     * this.selected value
+     * @param {Object} [result] when defined uses the result instead of the this.selected value
+     *
+     * @returns {boolean}
      */
   onSelect(result?: any): any;
   
@@ -111,7 +130,7 @@ export declare class AutoCompleteCustomElement {
      *
      * @returns {Promise}
      */
-  searchChanged(): any;
+  valueChanged(): any;
   
   /**
      * returns a list of length that is smaller or equal to the limit. The
@@ -141,11 +160,25 @@ export declare class AutoCompleteCustomElement {
   shouldPerformRequest(): any;
   
   /**
+     * Returns whether or not value has enough characters (meets minInput).
+     *
+     * @returns {boolean}
+     */
+  hasEnoughCharacters(): any;
+  
+  /**
      * @param {Object} query a waterline query object
      *
      * @returns {Promise} which resolves to the found results
      */
   findResults(query?: any): any;
+  
+  /**
+     * Emit custom event, or call function depending on supplied value.
+     *
+     * @param {string} value
+     */
+  onFooterSelected(value?: any): any;
   
   /**
      * Takes a string and converts to to a waterline query object that is used to

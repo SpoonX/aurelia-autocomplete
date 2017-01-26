@@ -15,80 +15,69 @@ export class AutoCompleteCustomElement {
   // avoid performing a query until it is toggled of.
   justSelected = false;
 
-  // stores a list of object representations of listeners
-  listeners        = [];
-  liEventListeners = [];
+  // Holds the value last used to perform a search
+  previousValue = null;
+
+  // Simple property that maintains if this is the initial (first) request.
+  initial = true;
 
   hasFocus = false;
 
-  setFocus(value) {
-    this.hasFocus = value;
-  }
+  // How many characters are required to type before starting a search.
+  @bindable minInput = 0;
 
-  //the max amount of results to return. (optional)
+  // The max amount of results to return. (optional)
   @bindable limit = 10;
 
   // Debounce value
   @bindable debounce = 100;
 
-  //the string that is appended to the api endpoint. e.g. api.com/language.
-  //language is the resource.
+  // The string that is appended to the api endpoint. e.g. api.com/language. language is the resource.
   @bindable resource;
 
-  // used when one already has a list of items to filter on. Requests is not
-  // necessary
+  // Used when one already has a list of items to filter on. Requests is not necessary
   @bindable items;
 
-  //the string to be used to do a contains search with. By default it will look
-  //if the name contains this value
-  @bindable search = '';
+  // The string to be used to do a contains search with. By default it will look if the name contains this value.
+  @bindable({defaultBindingMode: bindingMode.twoWay}) value = '';
 
-  //can be used to select default element visually
+  // Can be used to select default element visually
   @bindable selected;
 
-  //the property to query on.
+  // The property to query on.
   @bindable attribute = 'name';
 
-  //used to pass the "selected" value to the user's view model
-  @bindable({defaultBindingMode: bindingMode.twoWay}) value = null;
+  // Used to pass the result of the selected value to the user's view model
+  @bindable({defaultBindingMode: bindingMode.twoWay}) result = null;
 
-  //the results returned from the endpoint. These can be observed and
-  //mutated.
+  // The results returned from the endpoint. These can be observed and mutated.
   @bindable({defaultBindingMode: bindingMode.twoWay}) results = [];
 
   // Which relations to populate for results
   @bindable populate = null;
 
-  //used to determine the string to be shown as option label
+  // The label to show in the footer. Gets pulled through aurelia-i18n.
+  @bindable footerLabel = 'Create';
+
+  // Callback to call when the footer gets clicked.
+  @bindable footerSelected;
+
+  // Never, always or no-results
+  @bindable footerVisibility = 'never';
+
+  // Used to determine the string to be shown as option label
   @bindable label = result => {
-    return typeof result === 'object' ? result[this.attribute] : result;
+    return typeof result === 'object' && result !== null ? result[this.attribute] : result;
   };
 
-  // allow to overwrite the default apiEndpoint
+  // Allow to overwrite the default apiEndpoint
   @bindable endpoint;
 
-  // sort method that takes a list and returns a sorted list. No sorting by
-  // default.
+  // Sort method that takes a list and returns a sorted list. No sorting by default.
   @bindable sort = items => items;
 
-  // used to make the criteria more specific
+  // Used to make the criteria more specific
   @bindable criteria = {};
-
-  constructor(api, element) {
-    this.element     = element;
-    this.apiEndpoint = api;
-  }
-
-  bind() {
-    if (!this.resource && !this.items) {
-      return logger.error('auto complete requires resource or items bindable to be defined');
-    }
-
-    this.search       = this.label(this.value);
-    this.justSelected = true;
-
-    this.apiEndpoint = this.apiEndpoint.getEndpoint(this.endpoint);
-  }
 
   /**
    * converts a human readable string to a event keyCode
@@ -102,45 +91,82 @@ export class AutoCompleteCustomElement {
     up   : 38,
     enter: 13,
     tab  : 9,
+    esc  : 27,
     '*'  : '*'
   };
 
+  @computedFrom('results', 'value')
+  get showFooter() {
+    let visibility = this.footerVisibility;
+
+    return visibility === 'always'
+      || (visibility === 'no-results' && this.value && this.value.length && (!this.results || !this.results.length));
+  }
+
   /**
-   * registers a event listener for the keydown
+   * Autocomplete constructor.
    *
-   * @param {Element}  element dom element
-   * @param {string}   keyName human readable key name
-   * @param {function} eventCallback to be called when event is triggered
+   * @param {Config}  api
+   * @param {Element} element
    */
-  registerKeyDown(element, keyName, eventCallback) {
-    let eventFunction = event => {
-      if (this.keyCodes[keyName] === event.keyCode || keyName === '*') {
-        eventCallback(event);
+  constructor(api, element) {
+    this.element     = element;
+    this.apiEndpoint = api;
+  }
+
+  /**
+   * Bind callback.
+   *
+   * @returns {void}
+   */
+  bind() {
+    if (!this.resource && !this.items) {
+      return logger.error('auto complete requires resource or items bindable to be defined');
+    }
+
+    this.value       = this.label(this.result);
+    this.apiEndpoint = this.apiEndpoint.getEndpoint(this.endpoint);
+  }
+
+  /**
+   * Set focus on dropdown.
+   *
+   * @param {boolean} value
+   * @param {Event}   [event]
+   *
+   * @returns {boolean}
+   */
+  setFocus(value, event) {
+    function isDescendant(parent, child) {
+      let node = child.parentNode;
+
+      while (node !== null) {
+        if (node === parent) {
+          return true;
+        }
+
+        node = node.parentNode;
       }
-    };
 
-    this.listeners.push({
-      element  : element,
-      callback : eventCallback,
-      eventName: 'keydown'
-    });
+      return false;
+    }
 
-    element.addEventListener('keydown', eventFunction);
-  }
+    // If descendant, don't toggle dropdown so that other listeners will be called.
+    if (event && event.relatedTarget && isDescendant(this.element, event.relatedTarget)) {
+      return true;
+    }
 
-  detached() {
-    this.removeEventListeners(this.listeners);
-  }
+    if (!this.hasEnoughCharacters()) {
+      this.hasFocus = false;
 
-  /**
-   * removes event listeners from DOM
-   *
-   * @param {Object[]} listeners objects that represent a event listener
-   */
-  removeEventListeners(listeners) {
-    listeners.forEach(listener => {
-      listener.element.removeEventListener(listener.eventName, listener.callback);
-    });
+      return true;
+    }
+
+    if (value) {
+      this.valueChanged();
+    }
+
+    this.hasFocus = value;
   }
 
   /**
@@ -154,7 +180,7 @@ export class AutoCompleteCustomElement {
   labelWithMatches(result) {
     let label = this.label(result);
 
-    if (!label.replace) {
+    if (typeof label !== 'string') {
       return '';
     }
 
@@ -164,37 +190,33 @@ export class AutoCompleteCustomElement {
   }
 
   /**
-   * Prepares the DOM by adding event listeners
+   * Handle keyDown events from value.
+   *
+   * @param {Event} event
+   *
+   * @returns {*}
    */
-  attached() {
-    this.inputElement    = this.element.querySelectorAll('input')[0];
-    this.dropdownElement = this.element.querySelectorAll('.dropdown.open')[0];
+  handleKeyDown(event) {
+    if (event.keyCode === 40 || event.keyCode === 38) {
+      this.selected = this.nextFoundResult(this.selected, event.keyCode === 38);
 
-    this.registerKeyDown(this.inputElement, '*', () => {
-      this.dropdownElement.className = 'dropdown open';
-    });
+      return event.preventDefault();
+    }
 
-    this.registerKeyDown(this.inputElement, 'down', event => {
-      this.selected = this.nextFoundResult(this.selected);
-      // do not move the cursor
-      event.preventDefault();
-    });
+    if (event.keyCode === 9 || event.keyCode === 13) {
+      this.onSelect();
+    } else {
+      this.setFocus(event.keyCode !== 27);
+    }
 
-    this.registerKeyDown(this.inputElement, 'up', event => {
-      this.selected = this.nextFoundResult(this.selected, true);
-      // do not move the cursor
-      event.preventDefault();
-    });
-
-    this.registerKeyDown(this.inputElement, 'enter', () => this.onSelect());
-
-    // tab closes the dropdown and jumps to the next tabable element (default behavior)
-    this.registerKeyDown(this.inputElement, 'tab', () => this.onSelect());
+    return true;
   }
 
   /**
-   * @param {Object} current selected item
-   * @param {Boolean} reversed when true gets the previous instead
+   * Get the next result in the list.
+   *
+   * @param {Object}  current    selected item
+   * @param {Boolean} [reversed] when true gets the previous instead
    *
    * @returns {Object} the next of previous item
    */
@@ -212,14 +234,21 @@ export class AutoCompleteCustomElement {
    * Set the text in the input to that of the selected item and set the
    * selected item as the value. Then hide the results(dropdown)
    *
-   * @param {Object} [result] when defined uses the result instead of the
-   * this.selected value
+   * @param {Object} [result] when defined uses the result instead of the this.selected value
+   *
+   * @returns {boolean}
    */
   onSelect(result) {
-    this.value        = (arguments.length === 0) ? this.selected : result;
-    this.results      = [];
-    this.justSelected = true;
-    this.search       = this.label(this.value);
+    result             = (arguments.length === 0) ? this.selected : result;
+    this.justSelected  = true;
+    this.value         = this.label(result);
+    this.previousValue = this.value;
+    this.result        = result;
+    this.selected      = this.result;
+
+    this.setFocus(false);
+
+    return true;
   }
 
   /**
@@ -228,8 +257,14 @@ export class AutoCompleteCustomElement {
    *
    * @returns {Promise}
    */
-  searchChanged() {
+  valueChanged() {
     if (!this.shouldPerformRequest()) {
+      return Promise.resolve();
+    }
+
+    this.result = null;
+
+    if (!this.hasEnoughCharacters()) {
       this.results = [];
 
       return Promise.resolve();
@@ -243,20 +278,20 @@ export class AutoCompleteCustomElement {
       return Promise.resolve();
     }
 
-    let lastFindPromise = this.findResults(this.searchQuery(this.search)).then(results => {
-      if (this.lastFindPromise !== lastFindPromise) {
-        return;
-      }
+    let lastFindPromise = this.findResults(this.searchQuery(this.value))
+      .then(results => {
+        if (this.lastFindPromise !== lastFindPromise) {
+          return;
+        }
 
-      this.lastFindPromise = false;
+        this.previousValue   = this.value;
+        this.lastFindPromise = false;
+        this.results         = this.sort(results || []);
 
-      this.results = this.sort(results);
-
-      if (this.results.length !== 0) {
-        this.selected = this.results[0];
-        this.value    = this.selected;
-      }
-    });
+        if (this.results.length !== 0) {
+          this.selected = this.results[0];
+        }
+      });
 
     this.lastFindPromise = lastFindPromise;
   }
@@ -295,9 +330,9 @@ export class AutoCompleteCustomElement {
     return this.regex.test(this.label(item));
   }
 
-  @computedFrom('search')
+  @computedFrom('value')
   get regex() {
-    return new RegExp(this.search, 'gi');
+    return new RegExp(this.value, 'gi');
   }
 
   /**
@@ -312,7 +347,22 @@ export class AutoCompleteCustomElement {
       return false;
     }
 
-    return true;
+    if (this.initial) {
+      this.initial = false;
+
+      return true;
+    }
+
+    return this.value !== this.previousValue;
+  }
+
+  /**
+   * Returns whether or not value has enough characters (meets minInput).
+   *
+   * @returns {boolean}
+   */
+  hasEnoughCharacters() {
+    return ((this.value && this.value.length) || 0) >= this.minInput;
   }
 
   /**
@@ -323,6 +373,23 @@ export class AutoCompleteCustomElement {
   findResults(query) {
     return this.apiEndpoint.find(this.resource, query)
       .catch(err => logger.error('not able to find results', err));
+  }
+
+  /**
+   * Emit custom event, or call function depending on supplied value.
+   *
+   * @param {string} value
+   */
+  onFooterSelected(value) {
+    if (typeof this.footerSelected === 'function') {
+      this.footerSelected(value);
+
+      return;
+    }
+
+    this.element.dispatchEvent(
+      DOM.createCustomEvent('footer-selected', {detail: {value}})
+    );
   }
 
   /**

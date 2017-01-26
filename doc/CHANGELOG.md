@@ -1,3 +1,23 @@
+<a name="2.0.0"></a>
+# [2.0.0](https://github.com/SpoonX/aurelia-autocomplete/compare/v1.0.0...v2.0.0) (2017-01-26)
+
+
+### Bug Fixes
+
+* **component:** add conditional for pretty padding ([7d2b7a3](https://github.com/SpoonX/aurelia-autocomplete/commit/7d2b7a3))
+* **component:** check for string ([67ac0ee](https://github.com/SpoonX/aurelia-autocomplete/commit/67ac0ee))
+* **component:** make initial request run ([97f9096](https://github.com/SpoonX/aurelia-autocomplete/commit/97f9096))
+* **component:** use css attribute for IE support ([8633147](https://github.com/SpoonX/aurelia-autocomplete/commit/8633147))
+* **component:** use default empty string for label ([48d2d4b](https://github.com/SpoonX/aurelia-autocomplete/commit/48d2d4b))
+
+
+### Features
+
+* **component:** add minInput option ([f7c7f09](https://github.com/SpoonX/aurelia-autocomplete/commit/f7c7f09))
+* **component:** support use of custom event ([50545bb](https://github.com/SpoonX/aurelia-autocomplete/commit/50545bb))
+
+
+
 <a name="1.0.0"></a>
 # [1.0.0](https://github.com/SpoonX/aurelia-autocomplete/compare/v0.2.0...v1.0.0) (2017-01-25)
 

@@ -1,4 +1,4 @@
-var _dec, _dec2, _dec3, _dec4, _dec5, _class, _desc, _value, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13, _descriptor14;
+var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _class, _desc, _value, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13, _descriptor14, _descriptor15, _descriptor16, _descriptor17, _descriptor18;
 
 function _initDefineProp(target, property, descriptor, context) {
   if (!descriptor) return;
@@ -49,51 +49,61 @@ import { logger } from "../aurelia-autocomplete";
 import { DOM } from "aurelia-pal";
 import { resolvedView } from "aurelia-view-manager";
 
-export let AutoCompleteCustomElement = (_dec = resolvedView('spoonx/auto-complete', 'autocomplete'), _dec2 = inject(Config, DOM.Element), _dec3 = bindable({ defaultBindingMode: bindingMode.twoWay }), _dec4 = bindable({ defaultBindingMode: bindingMode.twoWay }), _dec5 = computedFrom('search'), _dec(_class = _dec2(_class = (_class2 = class AutoCompleteCustomElement {
+export let AutoCompleteCustomElement = (_dec = resolvedView('spoonx/auto-complete', 'autocomplete'), _dec2 = inject(Config, DOM.Element), _dec3 = bindable({ defaultBindingMode: bindingMode.twoWay }), _dec4 = bindable({ defaultBindingMode: bindingMode.twoWay }), _dec5 = bindable({ defaultBindingMode: bindingMode.twoWay }), _dec6 = computedFrom('results', 'value'), _dec7 = computedFrom('value'), _dec(_class = _dec2(_class = (_class2 = class AutoCompleteCustomElement {
+  get showFooter() {
+    let visibility = this.footerVisibility;
 
-  setFocus(value) {
-    this.hasFocus = value;
+    return visibility === 'always' || visibility === 'no-results' && this.value && this.value.length && (!this.results || !this.results.length);
   }
 
   constructor(api, element) {
     this.justSelected = false;
-    this.listeners = [];
-    this.liEventListeners = [];
+    this.previousValue = null;
+    this.initial = true;
     this.hasFocus = false;
 
-    _initDefineProp(this, "limit", _descriptor, this);
+    _initDefineProp(this, "minInput", _descriptor, this);
 
-    _initDefineProp(this, "debounce", _descriptor2, this);
+    _initDefineProp(this, "limit", _descriptor2, this);
 
-    _initDefineProp(this, "resource", _descriptor3, this);
+    _initDefineProp(this, "debounce", _descriptor3, this);
 
-    _initDefineProp(this, "items", _descriptor4, this);
+    _initDefineProp(this, "resource", _descriptor4, this);
 
-    _initDefineProp(this, "search", _descriptor5, this);
+    _initDefineProp(this, "items", _descriptor5, this);
 
-    _initDefineProp(this, "selected", _descriptor6, this);
+    _initDefineProp(this, "value", _descriptor6, this);
 
-    _initDefineProp(this, "attribute", _descriptor7, this);
+    _initDefineProp(this, "selected", _descriptor7, this);
 
-    _initDefineProp(this, "value", _descriptor8, this);
+    _initDefineProp(this, "attribute", _descriptor8, this);
 
-    _initDefineProp(this, "results", _descriptor9, this);
+    _initDefineProp(this, "result", _descriptor9, this);
 
-    _initDefineProp(this, "populate", _descriptor10, this);
+    _initDefineProp(this, "results", _descriptor10, this);
 
-    _initDefineProp(this, "label", _descriptor11, this);
+    _initDefineProp(this, "populate", _descriptor11, this);
 
-    _initDefineProp(this, "endpoint", _descriptor12, this);
+    _initDefineProp(this, "footerLabel", _descriptor12, this);
 
-    _initDefineProp(this, "sort", _descriptor13, this);
+    _initDefineProp(this, "footerSelected", _descriptor13, this);
 
-    _initDefineProp(this, "criteria", _descriptor14, this);
+    _initDefineProp(this, "footerVisibility", _descriptor14, this);
+
+    _initDefineProp(this, "label", _descriptor15, this);
+
+    _initDefineProp(this, "endpoint", _descriptor16, this);
+
+    _initDefineProp(this, "sort", _descriptor17, this);
+
+    _initDefineProp(this, "criteria", _descriptor18, this);
 
     this.keyCodes = {
       down: 40,
       up: 38,
       enter: 13,
       tab: 9,
+      esc: 27,
       '*': '*'
     };
 
@@ -106,42 +116,46 @@ export let AutoCompleteCustomElement = (_dec = resolvedView('spoonx/auto-complet
       return logger.error('auto complete requires resource or items bindable to be defined');
     }
 
-    this.search = this.label(this.value);
-    this.justSelected = true;
-
+    this.value = this.label(this.result);
     this.apiEndpoint = this.apiEndpoint.getEndpoint(this.endpoint);
   }
 
-  registerKeyDown(element, keyName, eventCallback) {
-    let eventFunction = event => {
-      if (this.keyCodes[keyName] === event.keyCode || keyName === '*') {
-        eventCallback(event);
+  setFocus(value, event) {
+    function isDescendant(parent, child) {
+      let node = child.parentNode;
+
+      while (node !== null) {
+        if (node === parent) {
+          return true;
+        }
+
+        node = node.parentNode;
       }
-    };
 
-    this.listeners.push({
-      element: element,
-      callback: eventCallback,
-      eventName: 'keydown'
-    });
+      return false;
+    }
 
-    element.addEventListener('keydown', eventFunction);
-  }
+    if (event && event.relatedTarget && isDescendant(this.element, event.relatedTarget)) {
+      return true;
+    }
 
-  detached() {
-    this.removeEventListeners(this.listeners);
-  }
+    if (!this.hasEnoughCharacters()) {
+      this.hasFocus = false;
 
-  removeEventListeners(listeners) {
-    listeners.forEach(listener => {
-      listener.element.removeEventListener(listener.eventName, listener.callback);
-    });
+      return true;
+    }
+
+    if (value) {
+      this.valueChanged();
+    }
+
+    this.hasFocus = value;
   }
 
   labelWithMatches(result) {
     let label = this.label(result);
 
-    if (!label.replace) {
+    if (typeof label !== 'string') {
       return '';
     }
 
@@ -150,29 +164,20 @@ export let AutoCompleteCustomElement = (_dec = resolvedView('spoonx/auto-complet
     });
   }
 
-  attached() {
-    this.inputElement = this.element.querySelectorAll('input')[0];
-    this.dropdownElement = this.element.querySelectorAll('.dropdown.open')[0];
+  handleKeyDown(event) {
+    if (event.keyCode === 40 || event.keyCode === 38) {
+      this.selected = this.nextFoundResult(this.selected, event.keyCode === 38);
 
-    this.registerKeyDown(this.inputElement, '*', () => {
-      this.dropdownElement.className = 'dropdown open';
-    });
+      return event.preventDefault();
+    }
 
-    this.registerKeyDown(this.inputElement, 'down', event => {
-      this.selected = this.nextFoundResult(this.selected);
+    if (event.keyCode === 9 || event.keyCode === 13) {
+      this.onSelect();
+    } else {
+      this.setFocus(event.keyCode !== 27);
+    }
 
-      event.preventDefault();
-    });
-
-    this.registerKeyDown(this.inputElement, 'up', event => {
-      this.selected = this.nextFoundResult(this.selected, true);
-
-      event.preventDefault();
-    });
-
-    this.registerKeyDown(this.inputElement, 'enter', () => this.onSelect());
-
-    this.registerKeyDown(this.inputElement, 'tab', () => this.onSelect());
+    return true;
   }
 
   nextFoundResult(current, reversed) {
@@ -186,14 +191,26 @@ export let AutoCompleteCustomElement = (_dec = resolvedView('spoonx/auto-complet
   }
 
   onSelect(result) {
-    this.value = arguments.length === 0 ? this.selected : result;
-    this.results = [];
+    result = arguments.length === 0 ? this.selected : result;
     this.justSelected = true;
-    this.search = this.label(this.value);
+    this.value = this.label(result);
+    this.previousValue = this.value;
+    this.result = result;
+    this.selected = this.result;
+
+    this.setFocus(false);
+
+    return true;
   }
 
-  searchChanged() {
+  valueChanged() {
     if (!this.shouldPerformRequest()) {
+      return Promise.resolve();
+    }
+
+    this.result = null;
+
+    if (!this.hasEnoughCharacters()) {
       this.results = [];
 
       return Promise.resolve();
@@ -205,18 +222,17 @@ export let AutoCompleteCustomElement = (_dec = resolvedView('spoonx/auto-complet
       return Promise.resolve();
     }
 
-    let lastFindPromise = this.findResults(this.searchQuery(this.search)).then(results => {
+    let lastFindPromise = this.findResults(this.searchQuery(this.value)).then(results => {
       if (this.lastFindPromise !== lastFindPromise) {
         return;
       }
 
+      this.previousValue = this.value;
       this.lastFindPromise = false;
-
-      this.results = this.sort(results);
+      this.results = this.sort(results || []);
 
       if (this.results.length !== 0) {
         this.selected = this.results[0];
-        this.value = this.selected;
       }
     });
 
@@ -242,7 +258,7 @@ export let AutoCompleteCustomElement = (_dec = resolvedView('spoonx/auto-complet
   }
 
   get regex() {
-    return new RegExp(this.search, 'gi');
+    return new RegExp(this.value, 'gi');
   }
 
   shouldPerformRequest() {
@@ -252,11 +268,31 @@ export let AutoCompleteCustomElement = (_dec = resolvedView('spoonx/auto-complet
       return false;
     }
 
-    return true;
+    if (this.initial) {
+      this.initial = false;
+
+      return true;
+    }
+
+    return this.value !== this.previousValue;
+  }
+
+  hasEnoughCharacters() {
+    return (this.value && this.value.length || 0) >= this.minInput;
   }
 
   findResults(query) {
     return this.apiEndpoint.find(this.resource, query).catch(err => logger.error('not able to find results', err));
+  }
+
+  onFooterSelected(value) {
+    if (typeof this.footerSelected === 'function') {
+      this.footerSelected(value);
+
+      return;
+    }
+
+    this.element.dispatchEvent(DOM.createCustomEvent('footer-selected', { detail: { value } }));
   }
 
   searchQuery(string) {
@@ -273,68 +309,86 @@ export let AutoCompleteCustomElement = (_dec = resolvedView('spoonx/auto-complet
 
     return query;
   }
-}, (_descriptor = _applyDecoratedDescriptor(_class2.prototype, "limit", [bindable], {
+}, (_descriptor = _applyDecoratedDescriptor(_class2.prototype, "minInput", [bindable], {
+  enumerable: true,
+  initializer: function () {
+    return 0;
+  }
+}), _descriptor2 = _applyDecoratedDescriptor(_class2.prototype, "limit", [bindable], {
   enumerable: true,
   initializer: function () {
     return 10;
   }
-}), _descriptor2 = _applyDecoratedDescriptor(_class2.prototype, "debounce", [bindable], {
+}), _descriptor3 = _applyDecoratedDescriptor(_class2.prototype, "debounce", [bindable], {
   enumerable: true,
   initializer: function () {
     return 100;
   }
-}), _descriptor3 = _applyDecoratedDescriptor(_class2.prototype, "resource", [bindable], {
+}), _descriptor4 = _applyDecoratedDescriptor(_class2.prototype, "resource", [bindable], {
   enumerable: true,
   initializer: null
-}), _descriptor4 = _applyDecoratedDescriptor(_class2.prototype, "items", [bindable], {
+}), _descriptor5 = _applyDecoratedDescriptor(_class2.prototype, "items", [bindable], {
   enumerable: true,
   initializer: null
-}), _descriptor5 = _applyDecoratedDescriptor(_class2.prototype, "search", [bindable], {
+}), _descriptor6 = _applyDecoratedDescriptor(_class2.prototype, "value", [_dec3], {
   enumerable: true,
   initializer: function () {
     return '';
   }
-}), _descriptor6 = _applyDecoratedDescriptor(_class2.prototype, "selected", [bindable], {
+}), _descriptor7 = _applyDecoratedDescriptor(_class2.prototype, "selected", [bindable], {
   enumerable: true,
   initializer: null
-}), _descriptor7 = _applyDecoratedDescriptor(_class2.prototype, "attribute", [bindable], {
+}), _descriptor8 = _applyDecoratedDescriptor(_class2.prototype, "attribute", [bindable], {
   enumerable: true,
   initializer: function () {
     return 'name';
   }
-}), _descriptor8 = _applyDecoratedDescriptor(_class2.prototype, "value", [_dec3], {
+}), _descriptor9 = _applyDecoratedDescriptor(_class2.prototype, "result", [_dec4], {
   enumerable: true,
   initializer: function () {
     return null;
   }
-}), _descriptor9 = _applyDecoratedDescriptor(_class2.prototype, "results", [_dec4], {
+}), _descriptor10 = _applyDecoratedDescriptor(_class2.prototype, "results", [_dec5], {
   enumerable: true,
   initializer: function () {
     return [];
   }
-}), _descriptor10 = _applyDecoratedDescriptor(_class2.prototype, "populate", [bindable], {
+}), _descriptor11 = _applyDecoratedDescriptor(_class2.prototype, "populate", [bindable], {
   enumerable: true,
   initializer: function () {
     return null;
   }
-}), _descriptor11 = _applyDecoratedDescriptor(_class2.prototype, "label", [bindable], {
+}), _descriptor12 = _applyDecoratedDescriptor(_class2.prototype, "footerLabel", [bindable], {
+  enumerable: true,
+  initializer: function () {
+    return 'Create';
+  }
+}), _descriptor13 = _applyDecoratedDescriptor(_class2.prototype, "footerSelected", [bindable], {
+  enumerable: true,
+  initializer: null
+}), _descriptor14 = _applyDecoratedDescriptor(_class2.prototype, "footerVisibility", [bindable], {
+  enumerable: true,
+  initializer: function () {
+    return 'never';
+  }
+}), _descriptor15 = _applyDecoratedDescriptor(_class2.prototype, "label", [bindable], {
   enumerable: true,
   initializer: function () {
     return result => {
-      return typeof result === 'object' ? result[this.attribute] : result;
+      return typeof result === 'object' && result !== null ? result[this.attribute] : result;
     };
   }
-}), _descriptor12 = _applyDecoratedDescriptor(_class2.prototype, "endpoint", [bindable], {
+}), _descriptor16 = _applyDecoratedDescriptor(_class2.prototype, "endpoint", [bindable], {
   enumerable: true,
   initializer: null
-}), _descriptor13 = _applyDecoratedDescriptor(_class2.prototype, "sort", [bindable], {
+}), _descriptor17 = _applyDecoratedDescriptor(_class2.prototype, "sort", [bindable], {
   enumerable: true,
   initializer: function () {
     return items => items;
   }
-}), _descriptor14 = _applyDecoratedDescriptor(_class2.prototype, "criteria", [bindable], {
+}), _descriptor18 = _applyDecoratedDescriptor(_class2.prototype, "criteria", [bindable], {
   enumerable: true,
   initializer: function () {
     return {};
   }
-}), _applyDecoratedDescriptor(_class2.prototype, "regex", [_dec5], Object.getOwnPropertyDescriptor(_class2.prototype, "regex"), _class2.prototype)), _class2)) || _class) || _class);
+}), _applyDecoratedDescriptor(_class2.prototype, "showFooter", [_dec6], Object.getOwnPropertyDescriptor(_class2.prototype, "showFooter"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "regex", [_dec7], Object.getOwnPropertyDescriptor(_class2.prototype, "regex"), _class2.prototype)), _class2)) || _class) || _class);
