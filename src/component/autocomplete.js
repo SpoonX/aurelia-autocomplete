@@ -60,8 +60,7 @@ export class AutoCompleteCustomElement {
   @bindable footerLabel = 'Create';
 
   // Callback to call when the footer gets clicked.
-  @bindable footerSelected = (value) => {
-  };
+  @bindable footerSelected;
 
   // Never, always or no-results
   @bindable footerVisibility = 'never';
@@ -100,12 +99,8 @@ export class AutoCompleteCustomElement {
   get showFooter() {
     let visibility = this.footerVisibility;
 
-    return visibility === 'always' || (
-        visibility === 'no-results' &&
-        this.value &&
-        this.value.length &&
-        (!this.results || !this.results.length)
-      );
+    return visibility === 'always'
+      || (visibility === 'no-results' && this.value && this.value.length && (!this.results || !this.results.length));
   }
 
   /**
@@ -121,6 +116,8 @@ export class AutoCompleteCustomElement {
 
   /**
    * Bind callback.
+   *
+   * @returns {void}
    */
   bind() {
     if (!this.resource && !this.items) {
@@ -143,8 +140,8 @@ export class AutoCompleteCustomElement {
     function isDescendant(parent, child) {
       let node = child.parentNode;
 
-      while (node != null) {
-        if (node == parent) {
+      while (node !== null) {
+        if (node === parent) {
           return true;
         }
 
@@ -238,6 +235,8 @@ export class AutoCompleteCustomElement {
    * selected item as the value. Then hide the results(dropdown)
    *
    * @param {Object} [result] when defined uses the result instead of the this.selected value
+   *
+   * @returns {boolean}
    */
   onSelect(result) {
     result             = (arguments.length === 0) ? this.selected : result;
@@ -363,7 +362,7 @@ export class AutoCompleteCustomElement {
    * @returns {boolean}
    */
   hasEnoughCharacters() {
-    return (this.value && this.value.length || 0) >= this.minInput;
+    return ((this.value && this.value.length) || 0) >= this.minInput;
   }
 
   /**
