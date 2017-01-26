@@ -4,11 +4,18 @@
 
 An autocomplete component for the aurelia framework.
 
+![autocomplete](./autocomplete.gif)
+
 ## Setup
+
+### Installation
 
 ```bash
 jspm install aurelia-autocomplete
 ```
+
+### Configure
+Simply register autocomplete as a plugin in main.js.
 
 ## Usage
 
@@ -38,7 +45,7 @@ export class MyViewModel {
 
   results     = [];
   customLabel = product => product.name + product.barcode;
-  search      = 'banan';
+  value       = 'banana';
   productCriteria = {
     stock: {'>': 0}
   };
@@ -74,8 +81,8 @@ export class MyViewModel {
   <auto-complete
     resource="product"
     selected.bind="selected"
-    search.bind="search"
-    value.bind="product"
+    value.two-way="value"
+    result.two-way="value"
     attribute="productName"
     results.bind="results"
     limit="5"
@@ -102,17 +109,32 @@ necessary.
 The string that is appended to the api endpoint. e.g. `language` is the
 resource in following url `api.com/language`
 
-#### search = '';
+#### value = '';
 The string to be used to do a contains search with. By default it will look
 if the name contains this value
 
 #### selected;
 Can be used to select default element visually
 
-#### debounce = 100
+#### result;
+The result object from the server, set when something was selected.
+
+#### minInput = 0;
+How many characters are required to type before starting a search.
+
+#### footerLabel = 'Create';
+The label to show in the footer. Using i18n? No problem, this automatically gets translated.
+
+#### footerVisibility = 'never';
+When to show the footer. Possible values are `never`, `always` an `no-results`.
+
+#### footerSelected = (value) => {};
+Callback that gets called with the selected value when the footer gets clicked.
+
+#### debounce = 100;
 Configure debounce value for user input.
 
-#### populate = null
+#### populate = null;
 Which relations to populate for results.
 
 #### attribute = 'name';
@@ -137,7 +159,6 @@ default.
 
 #### criteria = {};
 Used to make the criteria more specific
-
 
 ### Methods
 
