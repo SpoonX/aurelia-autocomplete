@@ -79,22 +79,6 @@ export class AutoCompleteCustomElement {
   // Used to make the criteria more specific
   @bindable criteria = {};
 
-  /**
-   * converts a human readable string to a event keyCode
-   *
-   * @param {string} keyName a human readable key representation
-   *
-   * @returns {number} which matches the keyCode
-   */
-  keyCodes = {
-    down : 40,
-    up   : 38,
-    enter: 13,
-    tab  : 9,
-    esc  : 27,
-    '*'  : '*'
-  };
-
   @computedFrom('results', 'value')
   get showFooter() {
     let visibility = this.footerVisibility;
