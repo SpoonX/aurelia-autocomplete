@@ -174,6 +174,27 @@ export class AutoCompleteCustomElement {
   }
 
   /**
+   * Handle keyUp events from value.
+   *
+   * @param {Event} event
+   *
+   * @returns {*}
+   */
+  handleKeyUp(event) {
+    if (event.keyCode !== 27) {
+      return;
+    }
+
+    if (this.hasFocus) {
+      event.stopPropagation();
+    }
+
+    this.setFocus(false);
+
+    return true;
+  }
+
+  /**
    * Handle keyDown events from value.
    *
    * @param {Event} event
@@ -181,6 +202,10 @@ export class AutoCompleteCustomElement {
    * @returns {*}
    */
   handleKeyDown(event) {
+    if (event.keyCode === 27) {
+      return;
+    }
+
     if (event.keyCode === 40 || event.keyCode === 38) {
       this.selected = this.nextFoundResult(this.selected, event.keyCode === 38);
 
@@ -188,9 +213,14 @@ export class AutoCompleteCustomElement {
     }
 
     if (event.keyCode === 9 || event.keyCode === 13) {
+      if (this.hasFocus) {
+        event.stopPropagation();
+        event.preventDefault();
+      }
+
       this.onSelect();
     } else {
-      this.setFocus(event.keyCode !== 27);
+      this.setFocus(true);
     }
 
     return true;
