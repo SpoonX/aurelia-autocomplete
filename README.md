@@ -101,6 +101,9 @@ export class MyViewModel {
 #### limit = 10;
 The max amount of results to return. (optional)
 
+#### name = '';
+The name of the element. (optional)
+
 #### items;
 Used when one already has a list of items to filter on. Requests is not
 necessary.
