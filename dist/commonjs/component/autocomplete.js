@@ -9,7 +9,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _class, _desc, _value, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13, _descriptor14, _descriptor15, _descriptor16, _descriptor17, _descriptor18;
+var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _class, _desc, _value, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13, _descriptor14, _descriptor15, _descriptor16, _descriptor17, _descriptor18, _descriptor19;
 
 var _aureliaFramework = require("aurelia-framework");
 
@@ -86,48 +86,41 @@ var AutoCompleteCustomElement = exports.AutoCompleteCustomElement = (_dec = (0, 
 
     _initDefineProp(this, "minInput", _descriptor, this);
 
-    _initDefineProp(this, "limit", _descriptor2, this);
+    _initDefineProp(this, "name", _descriptor2, this);
 
-    _initDefineProp(this, "debounce", _descriptor3, this);
+    _initDefineProp(this, "limit", _descriptor3, this);
 
-    _initDefineProp(this, "resource", _descriptor4, this);
+    _initDefineProp(this, "debounce", _descriptor4, this);
 
-    _initDefineProp(this, "items", _descriptor5, this);
+    _initDefineProp(this, "resource", _descriptor5, this);
 
-    _initDefineProp(this, "value", _descriptor6, this);
+    _initDefineProp(this, "items", _descriptor6, this);
 
-    _initDefineProp(this, "selected", _descriptor7, this);
+    _initDefineProp(this, "value", _descriptor7, this);
 
-    _initDefineProp(this, "attribute", _descriptor8, this);
+    _initDefineProp(this, "selected", _descriptor8, this);
 
-    _initDefineProp(this, "result", _descriptor9, this);
+    _initDefineProp(this, "attribute", _descriptor9, this);
 
-    _initDefineProp(this, "results", _descriptor10, this);
+    _initDefineProp(this, "result", _descriptor10, this);
 
-    _initDefineProp(this, "populate", _descriptor11, this);
+    _initDefineProp(this, "results", _descriptor11, this);
 
-    _initDefineProp(this, "footerLabel", _descriptor12, this);
+    _initDefineProp(this, "populate", _descriptor12, this);
 
-    _initDefineProp(this, "footerSelected", _descriptor13, this);
+    _initDefineProp(this, "footerLabel", _descriptor13, this);
 
-    _initDefineProp(this, "footerVisibility", _descriptor14, this);
+    _initDefineProp(this, "footerSelected", _descriptor14, this);
 
-    _initDefineProp(this, "label", _descriptor15, this);
+    _initDefineProp(this, "footerVisibility", _descriptor15, this);
 
-    _initDefineProp(this, "endpoint", _descriptor16, this);
+    _initDefineProp(this, "label", _descriptor16, this);
 
-    _initDefineProp(this, "sort", _descriptor17, this);
+    _initDefineProp(this, "endpoint", _descriptor17, this);
 
-    _initDefineProp(this, "criteria", _descriptor18, this);
+    _initDefineProp(this, "sort", _descriptor18, this);
 
-    this.keyCodes = {
-      down: 40,
-      up: 38,
-      enter: 13,
-      tab: 9,
-      esc: 27,
-      '*': '*'
-    };
+    _initDefineProp(this, "criteria", _descriptor19, this);
 
     this.element = element;
     this.apiEndpoint = api;
@@ -186,7 +179,25 @@ var AutoCompleteCustomElement = exports.AutoCompleteCustomElement = (_dec = (0, 
     });
   };
 
+  AutoCompleteCustomElement.prototype.handleKeyUp = function handleKeyUp(event) {
+    if (event.keyCode !== 27) {
+      return;
+    }
+
+    if (this.hasFocus) {
+      event.stopPropagation();
+    }
+
+    this.setFocus(false);
+
+    return true;
+  };
+
   AutoCompleteCustomElement.prototype.handleKeyDown = function handleKeyDown(event) {
+    if (event.keyCode === 27) {
+      return;
+    }
+
     if (event.keyCode === 40 || event.keyCode === 38) {
       this.selected = this.nextFoundResult(this.selected, event.keyCode === 38);
 
@@ -194,9 +205,14 @@ var AutoCompleteCustomElement = exports.AutoCompleteCustomElement = (_dec = (0, 
     }
 
     if (event.keyCode === 9 || event.keyCode === 13) {
+      if (this.hasFocus) {
+        event.stopPropagation();
+        event.preventDefault();
+      }
+
       this.onSelect();
     } else {
-      this.setFocus(event.keyCode !== 27);
+      this.setFocus(true);
     }
 
     return true;
@@ -349,64 +365,69 @@ var AutoCompleteCustomElement = exports.AutoCompleteCustomElement = (_dec = (0, 
   initializer: function initializer() {
     return 0;
   }
-}), _descriptor2 = _applyDecoratedDescriptor(_class2.prototype, "limit", [_aureliaFramework.bindable], {
-  enumerable: true,
-  initializer: function initializer() {
-    return 10;
-  }
-}), _descriptor3 = _applyDecoratedDescriptor(_class2.prototype, "debounce", [_aureliaFramework.bindable], {
-  enumerable: true,
-  initializer: function initializer() {
-    return 100;
-  }
-}), _descriptor4 = _applyDecoratedDescriptor(_class2.prototype, "resource", [_aureliaFramework.bindable], {
-  enumerable: true,
-  initializer: null
-}), _descriptor5 = _applyDecoratedDescriptor(_class2.prototype, "items", [_aureliaFramework.bindable], {
-  enumerable: true,
-  initializer: null
-}), _descriptor6 = _applyDecoratedDescriptor(_class2.prototype, "value", [_dec3], {
+}), _descriptor2 = _applyDecoratedDescriptor(_class2.prototype, "name", [_aureliaFramework.bindable], {
   enumerable: true,
   initializer: function initializer() {
     return '';
   }
-}), _descriptor7 = _applyDecoratedDescriptor(_class2.prototype, "selected", [_aureliaFramework.bindable], {
+}), _descriptor3 = _applyDecoratedDescriptor(_class2.prototype, "limit", [_aureliaFramework.bindable], {
+  enumerable: true,
+  initializer: function initializer() {
+    return 10;
+  }
+}), _descriptor4 = _applyDecoratedDescriptor(_class2.prototype, "debounce", [_aureliaFramework.bindable], {
+  enumerable: true,
+  initializer: function initializer() {
+    return 100;
+  }
+}), _descriptor5 = _applyDecoratedDescriptor(_class2.prototype, "resource", [_aureliaFramework.bindable], {
   enumerable: true,
   initializer: null
-}), _descriptor8 = _applyDecoratedDescriptor(_class2.prototype, "attribute", [_aureliaFramework.bindable], {
+}), _descriptor6 = _applyDecoratedDescriptor(_class2.prototype, "items", [_aureliaFramework.bindable], {
+  enumerable: true,
+  initializer: null
+}), _descriptor7 = _applyDecoratedDescriptor(_class2.prototype, "value", [_dec3], {
+  enumerable: true,
+  initializer: function initializer() {
+    return '';
+  }
+}), _descriptor8 = _applyDecoratedDescriptor(_class2.prototype, "selected", [_aureliaFramework.bindable], {
+  enumerable: true,
+  initializer: null
+}), _descriptor9 = _applyDecoratedDescriptor(_class2.prototype, "attribute", [_aureliaFramework.bindable], {
   enumerable: true,
   initializer: function initializer() {
     return 'name';
   }
-}), _descriptor9 = _applyDecoratedDescriptor(_class2.prototype, "result", [_dec4], {
+}), _descriptor10 = _applyDecoratedDescriptor(_class2.prototype, "result", [_dec4], {
   enumerable: true,
   initializer: function initializer() {
     return null;
   }
-}), _descriptor10 = _applyDecoratedDescriptor(_class2.prototype, "results", [_dec5], {
+}), _descriptor11 = _applyDecoratedDescriptor(_class2.prototype, "results", [_dec5], {
   enumerable: true,
   initializer: function initializer() {
     return [];
   }
-}), _descriptor11 = _applyDecoratedDescriptor(_class2.prototype, "populate", [_aureliaFramework.bindable], {
+}), _descriptor12 = _applyDecoratedDescriptor(_class2.prototype, "populate", [_aureliaFramework.bindable], {
   enumerable: true,
   initializer: function initializer() {
     return null;
   }
-}), _descriptor12 = _applyDecoratedDescriptor(_class2.prototype, "footerLabel", [_aureliaFramework.bindable], {
+}), _descriptor13 = _applyDecoratedDescriptor(_class2.prototype, "footerLabel", [_aureliaFramework.bindable], {
   enumerable: true,
   initializer: function initializer() {
     return 'Create';
   }
-}), _descriptor13 = _applyDecoratedDescriptor(_class2.prototype, "footerSelected", [_aureliaFramework.bindable], {
+}), _descriptor14 = _applyDecoratedDescriptor(_class2.prototype, "footerSelected", [_aureliaFramework.bindable], {
   enumerable: true,
   initializer: null
-}), _descriptor14 = _applyDecoratedDescriptor(_class2.prototype, "footerVisibility", [_aureliaFramework.bindable], {
+}), _descriptor15 = _applyDecoratedDescriptor(_class2.prototype, "footerVisibility", [_aureliaFramework.bindable], {
   enumerable: true,
   initializer: function initializer() {
     return 'never';
   }
-}), _descriptor15 = _applyDecoratedDescriptor(_class2.prototype, "label", [_aureliaFramework.bindable], {
+}), _descriptor16 = _applyDecoratedDescriptor(_class2.prototype, "label", [_aureliaFramework.bindable], {
   enumerable: true,
   initializer: function initializer() {
     var _this3 = this;
@@ -415,17 +436,17 @@ var AutoCompleteCustomElement = exports.AutoCompleteCustomElement = (_dec = (0, 
       return (typeof result === "undefined" ? "undefined" : _typeof(result)) === 'object' && result !== null ? result[_this3.attribute] : result;
     };
   }
-}), _descriptor16 = _applyDecoratedDescriptor(_class2.prototype, "endpoint", [_aureliaFramework.bindable], {
+}), _descriptor17 = _applyDecoratedDescriptor(_class2.prototype, "endpoint", [_aureliaFramework.bindable], {
   enumerable: true,
   initializer: null
-}), _descriptor17 = _applyDecoratedDescriptor(_class2.prototype, "sort", [_aureliaFramework.bindable], {
+}), _descriptor18 = _applyDecoratedDescriptor(_class2.prototype, "sort", [_aureliaFramework.bindable], {
   enumerable: true,
   initializer: function initializer() {
     return function (items) {
       return items;
     };
   }
-}), _descriptor18 = _applyDecoratedDescriptor(_class2.prototype, "criteria", [_aureliaFramework.bindable], {
+}), _descriptor19 = _applyDecoratedDescriptor(_class2.prototype, "criteria", [_aureliaFramework.bindable], {
   enumerable: true,
   initializer: function initializer() {
     return {};

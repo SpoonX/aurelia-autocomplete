@@ -1,3 +1,14 @@
+<a name="2.1.0"></a>
+# [2.1.0](https://github.com/SpoonX/aurelia-autocomplete/compare/v2.0.0...v2.1.0) (2017-02-23)
+
+
+### Bug Fixes
+
+* **autocomplete:** add name and type button ([ee35abb](https://github.com/SpoonX/aurelia-autocomplete/commit/ee35abb))
+* **component:** catch escape and enter ([0f649df](https://github.com/SpoonX/aurelia-autocomplete/commit/0f649df))
+
+
+
 <a name="2.0.0"></a>
 # [2.0.0](https://github.com/SpoonX/aurelia-autocomplete/compare/v1.0.0...v2.0.0) (2017-01-26)
 

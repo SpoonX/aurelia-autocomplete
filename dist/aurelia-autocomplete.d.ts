@@ -32,6 +32,7 @@ export declare class AutoCompleteCustomElement {
   initial: any;
   hasFocus: any;
   minInput: any;
+  name: any;
   limit: any;
   debounce: any;
   resource: any;
@@ -49,15 +50,6 @@ export declare class AutoCompleteCustomElement {
   endpoint: any;
   sort: any;
   criteria: any;
-  
-  /**
-     * converts a human readable string to a event keyCode
-     *
-     * @param {string} keyName a human readable key representation
-     *
-     * @returns {number} which matches the keyCode
-     */
-  keyCodes: any;
   showFooter: any;
   
   /**
@@ -94,6 +86,15 @@ export declare class AutoCompleteCustomElement {
      * @returns {String}
      */
   labelWithMatches(result?: any): any;
+  
+  /**
+     * Handle keyUp events from value.
+     *
+     * @param {Event} event
+     *
+     * @returns {*}
+     */
+  handleKeyUp(event?: any): any;
   
   /**
      * Handle keyDown events from value.

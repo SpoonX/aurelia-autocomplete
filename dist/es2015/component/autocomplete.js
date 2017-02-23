@@ -1,4 +1,4 @@
-var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _class, _desc, _value, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13, _descriptor14, _descriptor15, _descriptor16, _descriptor17, _descriptor18;
+var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _class, _desc, _value, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13, _descriptor14, _descriptor15, _descriptor16, _descriptor17, _descriptor18, _descriptor19;
 
 function _initDefineProp(target, property, descriptor, context) {
   if (!descriptor) return;
@@ -64,48 +64,41 @@ export let AutoCompleteCustomElement = (_dec = resolvedView('spoonx/auto-complet
 
     _initDefineProp(this, "minInput", _descriptor, this);
 
-    _initDefineProp(this, "limit", _descriptor2, this);
+    _initDefineProp(this, "name", _descriptor2, this);
 
-    _initDefineProp(this, "debounce", _descriptor3, this);
+    _initDefineProp(this, "limit", _descriptor3, this);
 
-    _initDefineProp(this, "resource", _descriptor4, this);
+    _initDefineProp(this, "debounce", _descriptor4, this);
 
-    _initDefineProp(this, "items", _descriptor5, this);
+    _initDefineProp(this, "resource", _descriptor5, this);
 
-    _initDefineProp(this, "value", _descriptor6, this);
+    _initDefineProp(this, "items", _descriptor6, this);
 
-    _initDefineProp(this, "selected", _descriptor7, this);
+    _initDefineProp(this, "value", _descriptor7, this);
 
-    _initDefineProp(this, "attribute", _descriptor8, this);
+    _initDefineProp(this, "selected", _descriptor8, this);
 
-    _initDefineProp(this, "result", _descriptor9, this);
+    _initDefineProp(this, "attribute", _descriptor9, this);
 
-    _initDefineProp(this, "results", _descriptor10, this);
+    _initDefineProp(this, "result", _descriptor10, this);
 
-    _initDefineProp(this, "populate", _descriptor11, this);
+    _initDefineProp(this, "results", _descriptor11, this);
 
-    _initDefineProp(this, "footerLabel", _descriptor12, this);
+    _initDefineProp(this, "populate", _descriptor12, this);
 
-    _initDefineProp(this, "footerSelected", _descriptor13, this);
+    _initDefineProp(this, "footerLabel", _descriptor13, this);
 
-    _initDefineProp(this, "footerVisibility", _descriptor14, this);
+    _initDefineProp(this, "footerSelected", _descriptor14, this);
 
-    _initDefineProp(this, "label", _descriptor15, this);
+    _initDefineProp(this, "footerVisibility", _descriptor15, this);
 
-    _initDefineProp(this, "endpoint", _descriptor16, this);
+    _initDefineProp(this, "label", _descriptor16, this);
 
-    _initDefineProp(this, "sort", _descriptor17, this);
+    _initDefineProp(this, "endpoint", _descriptor17, this);
 
-    _initDefineProp(this, "criteria", _descriptor18, this);
+    _initDefineProp(this, "sort", _descriptor18, this);
 
-    this.keyCodes = {
-      down: 40,
-      up: 38,
-      enter: 13,
-      tab: 9,
-      esc: 27,
-      '*': '*'
-    };
+    _initDefineProp(this, "criteria", _descriptor19, this);
 
     this.element = element;
     this.apiEndpoint = api;
@@ -164,7 +157,25 @@ export let AutoCompleteCustomElement = (_dec = resolvedView('spoonx/auto-complet
     });
   }
 
+  handleKeyUp(event) {
+    if (event.keyCode !== 27) {
+      return;
+    }
+
+    if (this.hasFocus) {
+      event.stopPropagation();
+    }
+
+    this.setFocus(false);
+
+    return true;
+  }
+
   handleKeyDown(event) {
+    if (event.keyCode === 27) {
+      return;
+    }
+
     if (event.keyCode === 40 || event.keyCode === 38) {
       this.selected = this.nextFoundResult(this.selected, event.keyCode === 38);
 
@@ -172,9 +183,14 @@ export let AutoCompleteCustomElement = (_dec = resolvedView('spoonx/auto-complet
     }
 
     if (event.keyCode === 9 || event.keyCode === 13) {
+      if (this.hasFocus) {
+        event.stopPropagation();
+        event.preventDefault();
+      }
+
       this.onSelect();
     } else {
-      this.setFocus(event.keyCode !== 27);
+      this.setFocus(true);
     }
 
     return true;
@@ -314,79 +330,84 @@ export let AutoCompleteCustomElement = (_dec = resolvedView('spoonx/auto-complet
   initializer: function () {
     return 0;
   }
-}), _descriptor2 = _applyDecoratedDescriptor(_class2.prototype, "limit", [bindable], {
-  enumerable: true,
-  initializer: function () {
-    return 10;
-  }
-}), _descriptor3 = _applyDecoratedDescriptor(_class2.prototype, "debounce", [bindable], {
-  enumerable: true,
-  initializer: function () {
-    return 100;
-  }
-}), _descriptor4 = _applyDecoratedDescriptor(_class2.prototype, "resource", [bindable], {
-  enumerable: true,
-  initializer: null
-}), _descriptor5 = _applyDecoratedDescriptor(_class2.prototype, "items", [bindable], {
-  enumerable: true,
-  initializer: null
-}), _descriptor6 = _applyDecoratedDescriptor(_class2.prototype, "value", [_dec3], {
+}), _descriptor2 = _applyDecoratedDescriptor(_class2.prototype, "name", [bindable], {
   enumerable: true,
   initializer: function () {
     return '';
   }
-}), _descriptor7 = _applyDecoratedDescriptor(_class2.prototype, "selected", [bindable], {
+}), _descriptor3 = _applyDecoratedDescriptor(_class2.prototype, "limit", [bindable], {
+  enumerable: true,
+  initializer: function () {
+    return 10;
+  }
+}), _descriptor4 = _applyDecoratedDescriptor(_class2.prototype, "debounce", [bindable], {
+  enumerable: true,
+  initializer: function () {
+    return 100;
+  }
+}), _descriptor5 = _applyDecoratedDescriptor(_class2.prototype, "resource", [bindable], {
   enumerable: true,
   initializer: null
-}), _descriptor8 = _applyDecoratedDescriptor(_class2.prototype, "attribute", [bindable], {
+}), _descriptor6 = _applyDecoratedDescriptor(_class2.prototype, "items", [bindable], {
+  enumerable: true,
+  initializer: null
+}), _descriptor7 = _applyDecoratedDescriptor(_class2.prototype, "value", [_dec3], {
+  enumerable: true,
+  initializer: function () {
+    return '';
+  }
+}), _descriptor8 = _applyDecoratedDescriptor(_class2.prototype, "selected", [bindable], {
+  enumerable: true,
+  initializer: null
+}), _descriptor9 = _applyDecoratedDescriptor(_class2.prototype, "attribute", [bindable], {
   enumerable: true,
   initializer: function () {
     return 'name';
   }
-}), _descriptor9 = _applyDecoratedDescriptor(_class2.prototype, "result", [_dec4], {
+}), _descriptor10 = _applyDecoratedDescriptor(_class2.prototype, "result", [_dec4], {
   enumerable: true,
   initializer: function () {
     return null;
   }
-}), _descriptor10 = _applyDecoratedDescriptor(_class2.prototype, "results", [_dec5], {
+}), _descriptor11 = _applyDecoratedDescriptor(_class2.prototype, "results", [_dec5], {
   enumerable: true,
   initializer: function () {
     return [];
   }
-}), _descriptor11 = _applyDecoratedDescriptor(_class2.prototype, "populate", [bindable], {
+}), _descriptor12 = _applyDecoratedDescriptor(_class2.prototype, "populate", [bindable], {
   enumerable: true,
   initializer: function () {
     return null;
   }
-}), _descriptor12 = _applyDecoratedDescriptor(_class2.prototype, "footerLabel", [bindable], {
+}), _descriptor13 = _applyDecoratedDescriptor(_class2.prototype, "footerLabel", [bindable], {
   enumerable: true,
   initializer: function () {
     return 'Create';
   }
-}), _descriptor13 = _applyDecoratedDescriptor(_class2.prototype, "footerSelected", [bindable], {
+}), _descriptor14 = _applyDecoratedDescriptor(_class2.prototype, "footerSelected", [bindable], {
   enumerable: true,
   initializer: null
-}), _descriptor14 = _applyDecoratedDescriptor(_class2.prototype, "footerVisibility", [bindable], {
+}), _descriptor15 = _applyDecoratedDescriptor(_class2.prototype, "footerVisibility", [bindable], {
   enumerable: true,
   initializer: function () {
     return 'never';
   }
-}), _descriptor15 = _applyDecoratedDescriptor(_class2.prototype, "label", [bindable], {
+}), _descriptor16 = _applyDecoratedDescriptor(_class2.prototype, "label", [bindable], {
   enumerable: true,
   initializer: function () {
     return result => {
       return typeof result === 'object' && result !== null ? result[this.attribute] : result;
     };
   }
-}), _descriptor16 = _applyDecoratedDescriptor(_class2.prototype, "endpoint", [bindable], {
+}), _descriptor17 = _applyDecoratedDescriptor(_class2.prototype, "endpoint", [bindable], {
   enumerable: true,
   initializer: null
-}), _descriptor17 = _applyDecoratedDescriptor(_class2.prototype, "sort", [bindable], {
+}), _descriptor18 = _applyDecoratedDescriptor(_class2.prototype, "sort", [bindable], {
   enumerable: true,
   initializer: function () {
     return items => items;
   }
-}), _descriptor18 = _applyDecoratedDescriptor(_class2.prototype, "criteria", [bindable], {
+}), _descriptor19 = _applyDecoratedDescriptor(_class2.prototype, "criteria", [bindable], {
   enumerable: true,
   initializer: function () {
     return {};

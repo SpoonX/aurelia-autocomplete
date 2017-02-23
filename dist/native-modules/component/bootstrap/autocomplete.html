@@ -1,6 +1,7 @@
 <template>
   <div class="dropdown open">
     <input
+      name.bind="name"
       class="form-control dropdown-toggle"
       value.bind="value & debounce:debounce"
       placeholder="${'Search' | translate}"
@@ -8,6 +9,7 @@
       autocomplete="off"
       aria-haspopup="true"
       keydown.trigger="handleKeyDown($event)"
+      keyup.trigger="handleKeyUp($event)"
       focus.trigger="setFocus(true, $event)"
       blur.trigger="setFocus(false, $event)"
       aria-expanded="true"
@@ -44,7 +46,7 @@
       </template>
       <li if.bind="showFooter" role="separator" class="divider"></li>
       <li if.bind="showFooter" style="padding: 0 9px 4px 9px;" click.trigger="onFooterSelected(value)">
-        <button class="btn btn-success btn-xs btn-block" blur.trigger="setFocus(false, $event)">
+        <button class="btn btn-success btn-xs btn-block" blur.trigger="setFocus(false, $event)" type="button">
           <span t="${footerLabel}">${footerLabel}</span>
         </button>
       </li>
