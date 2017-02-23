@@ -26,6 +26,9 @@ export class AutoCompleteCustomElement {
   // How many characters are required to type before starting a search.
   @bindable minInput = 0;
 
+  // the name of the input element
+  @bindable name = '';
+
   // The max amount of results to return. (optional)
   @bindable limit = 10;
 
