@@ -1,4 +1,4 @@
-var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _class, _desc, _value, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13, _descriptor14, _descriptor15, _descriptor16, _descriptor17, _descriptor18, _descriptor19;
+var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _class, _desc, _value, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13, _descriptor14, _descriptor15, _descriptor16, _descriptor17, _descriptor18, _descriptor19, _descriptor20;
 
 function _initDefineProp(target, property, descriptor, context) {
   if (!descriptor) return;
@@ -96,9 +96,11 @@ export let AutoCompleteCustomElement = (_dec = resolvedView('spoonx/auto-complet
 
     _initDefineProp(this, "endpoint", _descriptor17, this);
 
-    _initDefineProp(this, "sort", _descriptor18, this);
+    _initDefineProp(this, "placeholder", _descriptor18, this);
 
-    _initDefineProp(this, "criteria", _descriptor19, this);
+    _initDefineProp(this, "sort", _descriptor19, this);
+
+    _initDefineProp(this, "criteria", _descriptor20, this);
 
     this.element = element;
     this.apiEndpoint = api;
@@ -402,12 +404,17 @@ export let AutoCompleteCustomElement = (_dec = resolvedView('spoonx/auto-complet
 }), _descriptor17 = _applyDecoratedDescriptor(_class2.prototype, "endpoint", [bindable], {
   enumerable: true,
   initializer: null
-}), _descriptor18 = _applyDecoratedDescriptor(_class2.prototype, "sort", [bindable], {
+}), _descriptor18 = _applyDecoratedDescriptor(_class2.prototype, "placeholder", [bindable], {
+  enumerable: true,
+  initializer: function () {
+    return 'Search';
+  }
+}), _descriptor19 = _applyDecoratedDescriptor(_class2.prototype, "sort", [bindable], {
   enumerable: true,
   initializer: function () {
     return items => items;
   }
-}), _descriptor19 = _applyDecoratedDescriptor(_class2.prototype, "criteria", [bindable], {
+}), _descriptor20 = _applyDecoratedDescriptor(_class2.prototype, "criteria", [bindable], {
   enumerable: true,
   initializer: function () {
     return {};

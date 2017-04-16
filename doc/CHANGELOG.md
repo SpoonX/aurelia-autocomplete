@@ -1,3 +1,14 @@
+<a name="2.1.1"></a>
+## [2.1.1](https://github.com/SpoonX/aurelia-autocomplete/compare/v2.1.0...v2.1.1) (2017-04-16)
+
+
+### Features
+
+* **autocomplete:** make placeholder bindable ([6e0873b](https://github.com/SpoonX/aurelia-autocomplete/commit/6e0873b))
+* **autocomplete:** make placeholder configurable ([5b8e4fd](https://github.com/SpoonX/aurelia-autocomplete/commit/5b8e4fd))
+
+
+
 <a name="2.1.0"></a>
 # [2.1.0](https://github.com/SpoonX/aurelia-autocomplete/compare/v2.0.0...v2.1.0) (2017-02-23)
 

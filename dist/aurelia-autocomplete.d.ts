@@ -48,6 +48,7 @@ export declare class AutoCompleteCustomElement {
   footerVisibility: any;
   label: any;
   endpoint: any;
+  placeholder: any;
   sort: any;
   criteria: any;
   showFooter: any;

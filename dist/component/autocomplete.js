@@ -76,6 +76,9 @@ export class AutoCompleteCustomElement {
   // Allow to overwrite the default apiEndpoint
   @bindable endpoint;
 
+  // Input field's placeholder
+  @bindable placeholder = 'Search';
+
   // Sort method that takes a list and returns a sorted list. No sorting by default.
   @bindable sort = items => items;
 
