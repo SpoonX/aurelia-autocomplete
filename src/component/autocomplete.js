@@ -75,7 +75,7 @@ export class AutoCompleteCustomElement {
 
   // Allow to overwrite the default apiEndpoint
   @bindable endpoint;
-   
+
   // Input field's placeholder
   @bindable placeholder = 'Search';
 
