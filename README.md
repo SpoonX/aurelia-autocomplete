@@ -156,6 +156,9 @@ Used to determine the string to be shown as option label
 #### endpoint;
 Allow to overwrite the default api endpoint
 
+#### placeholder;
+Overwrite the default placeholder (Search). Gets translated automatically.
+
 #### sort = items => items;
 Sort method that takes a list and returns a sorted list. No sorting by
 default.
