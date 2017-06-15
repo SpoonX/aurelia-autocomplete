@@ -1,3 +1,13 @@
+<a name="2.1.2"></a>
+## [2.1.2](https://github.com/SpoonX/aurelia-autocomplete/compare/v2.1.1...v2.1.2) (2017-06-15)
+
+
+### Bug Fixes
+
+* **autocomplete:** fix value converter ([e0aaa44](https://github.com/SpoonX/aurelia-autocomplete/commit/e0aaa44))
+
+
+
 <a name="2.1.1"></a>
 ## [2.1.1](https://github.com/SpoonX/aurelia-autocomplete/compare/v2.1.0...v2.1.1) (2017-04-16)
 
