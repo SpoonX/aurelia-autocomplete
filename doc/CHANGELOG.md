@@ -1,3 +1,13 @@
+<a name="2.2.0"></a>
+# [2.2.0](https://github.com/SpoonX/aurelia-autocomplete/compare/v2.1.2...v2.2.0) (2017-07-06)
+
+
+### Features
+
+* **project:** support search on multiple fields ([4eb27d7](https://github.com/SpoonX/aurelia-autocomplete/commit/4eb27d7))
+
+
+
 <a name="2.1.2"></a>
 ## [2.1.2](https://github.com/SpoonX/aurelia-autocomplete/compare/v2.1.1...v2.1.2) (2017-06-15)
 

@@ -155,7 +155,7 @@ export let AutoCompleteCustomElement = (_dec = resolvedView('spoonx/auto-complet
     }
 
     return label.replace(this.regex, match => {
-      return `<strong>${ match }</strong>`;
+      return `<strong>${match}</strong>`;
     });
   }
 
@@ -314,7 +314,18 @@ export let AutoCompleteCustomElement = (_dec = resolvedView('spoonx/auto-complet
   }
 
   searchQuery(string) {
-    let mergedWhere = Object.assign({ [this.attribute]: { contains: string } }, this.criteria);
+    let ors = [];
+    let where;
+
+    if (Array.isArray(this.attribute)) {
+      this.attribute.forEach(attribute => {
+        ors.push({ [attribute]: { contains: string } });
+      });
+    } else {
+      where = { [this.attribute]: { contains: string } };
+    }
+
+    let mergedWhere = Object.assign(Array.isArray(this.attribute) ? { or: ors } : where, this.criteria);
 
     let query = {
       populate: this.populate || 'null',
@@ -398,7 +409,9 @@ export let AutoCompleteCustomElement = (_dec = resolvedView('spoonx/auto-complet
   enumerable: true,
   initializer: function () {
     return result => {
-      return typeof result === 'object' && result !== null ? result[this.attribute] : result;
+      let defaultAttribute = Array.isArray(this.attribute) ? this.attribute[0] || 'name' : this.attribute;
+
+      return typeof result === 'object' && result !== null ? result[defaultAttribute] : result;
     };
   }
 }), _descriptor17 = _applyDecoratedDescriptor(_class2.prototype, "endpoint", [bindable], {

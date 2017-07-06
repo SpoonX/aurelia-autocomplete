@@ -338,9 +338,22 @@ var AutoCompleteCustomElement = exports.AutoCompleteCustomElement = (_dec = (0, 
   };
 
   AutoCompleteCustomElement.prototype.searchQuery = function searchQuery(string) {
-    var _Object$assign;
+    var ors = [];
+    var where = void 0;
 
-    var mergedWhere = Object.assign((_Object$assign = {}, _Object$assign[this.attribute] = { contains: string }, _Object$assign), this.criteria);
+    if (Array.isArray(this.attribute)) {
+      this.attribute.forEach(function (attribute) {
+        var _ors$push;
+
+        ors.push((_ors$push = {}, _ors$push[attribute] = { contains: string }, _ors$push));
+      });
+    } else {
+      var _where;
+
+      where = (_where = {}, _where[this.attribute] = { contains: string }, _where);
+    }
+
+    var mergedWhere = Object.assign(Array.isArray(this.attribute) ? { or: ors } : where, this.criteria);
 
     var query = {
       populate: this.populate || 'null',
@@ -435,7 +448,9 @@ var AutoCompleteCustomElement = exports.AutoCompleteCustomElement = (_dec = (0, 
     var _this3 = this;
 
     return function (result) {
-      return (typeof result === "undefined" ? "undefined" : _typeof(result)) === 'object' && result !== null ? result[_this3.attribute] : result;
+      var defaultAttribute = Array.isArray(_this3.attribute) ? _this3.attribute[0] || 'name' : _this3.attribute;
+
+      return (typeof result === "undefined" ? "undefined" : _typeof(result)) === 'object' && result !== null ? result[defaultAttribute] : result;
     };
   }
 }), _descriptor17 = _applyDecoratedDescriptor(_class2.prototype, "endpoint", [_aureliaFramework.bindable], {
