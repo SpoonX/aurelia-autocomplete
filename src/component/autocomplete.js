@@ -70,7 +70,9 @@ export class AutoCompleteCustomElement {
 
   // Used to determine the string to be shown as option label
   @bindable label = result => {
-    return typeof result === 'object' && result !== null ? result[this.attribute] : result;
+    let defaultAttribute = Array.isArray(this.attribute) ? this.attribute[0] || 'name' : this.attribute;
+
+    return typeof result === 'object' && result !== null ? result[defaultAttribute] : result;
   };
 
   // Allow to overwrite the default apiEndpoint
@@ -421,8 +423,19 @@ export class AutoCompleteCustomElement {
    * @returns {Object} a waterline query object
    */
   searchQuery(string) {
+    let ors = [];
+    let where;
+
+    if (Array.isArray(this.attribute)) {
+      this.attribute.forEach(attribute => {
+        ors.push({[attribute]: {contains: string}});
+      });
+    } else {
+      where = {[this.attribute]: {contains: string}};
+    }
+
     let mergedWhere = Object.assign(
-      {[this.attribute]: {contains: string}},
+      Array.isArray(this.attribute) ? {or: ors} : where,
       this.criteria
     );
 

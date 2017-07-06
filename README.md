@@ -44,6 +44,7 @@ export class Page {
 export class MyViewModel {
 
   results     = [];
+  attributes  = ['productName', 'barcode'];
   customLabel = product => product.name + product.barcode;
   value       = 'banana';
   productCriteria = {
@@ -83,7 +84,7 @@ export class MyViewModel {
     selected.bind="selected"
     value.two-way="value"
     result.two-way="value"
-    attribute="productName"
+    attribute.bind="attributes"
     results.bind="results"
     limit="5"
     endpoint="product-api"
@@ -141,7 +142,7 @@ Configure debounce value for user input.
 Which relations to populate for results.
 
 #### attribute = 'name';
-The property to query on.
+The property to query on. Support both string and array (in case it should query on multiple fields)
 
 #### ({defaultBindingMode: bindingMode.twoWay}) value = null;
 Used to pass the "selected" value to the user's view model
