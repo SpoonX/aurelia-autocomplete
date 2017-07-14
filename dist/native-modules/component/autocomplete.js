@@ -210,7 +210,9 @@ var AutoCompleteCustomElement = exports.AutoCompleteCustomElement = (_dec = (0, 
         event.preventDefault();
       }
 
-      this.onSelect();
+      if (this.results.length !== 0) {
+        this.onSelect();
+      }
     } else {
       this.setFocus(true);
     }

@@ -1,3 +1,13 @@
+<a name="2.2.1"></a>
+## [2.2.1](https://github.com/SpoonX/aurelia-autocomplete/compare/v2.2.0...v2.2.1) (2017-07-14)
+
+
+### Bug Fixes
+
+* **project:** prevent selecting result when search result is empty ([e33434c](https://github.com/SpoonX/aurelia-autocomplete/commit/e33434c))
+
+
+
 <a name="2.2.0"></a>
 # [2.2.0](https://github.com/SpoonX/aurelia-autocomplete/compare/v2.1.2...v2.2.0) (2017-07-06)
 
