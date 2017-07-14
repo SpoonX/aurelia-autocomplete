@@ -226,7 +226,9 @@ export class AutoCompleteCustomElement {
         event.preventDefault();
       }
 
-      this.onSelect();
+      if (this.results.length !== 0) {
+        this.onSelect();
+      }
     } else {
       this.setFocus(true);
     }
