@@ -148,14 +148,8 @@ export class AutoCompleteCustomElement {
       return true;
     }
 
-    if (!this.hasEnoughCharacters()) {
-      this.hasFocus = false;
-
-      return true;
-    }
-
     if (value) {
-      this.valueChanged();
+      return this.valueChanged();
     }
 
     this.hasFocus = value;
@@ -226,7 +220,7 @@ export class AutoCompleteCustomElement {
         event.preventDefault();
       }
 
-      if (this.results.length !== 0) {
+      if (this.results.length !== 0 && this.hasFocus) {
         this.onSelect();
       }
     } else {
@@ -284,6 +278,8 @@ export class AutoCompleteCustomElement {
   valueChanged() {
     if (!this.shouldPerformRequest()) {
       this.previousValue = this.value;
+      this.hasFocus = !(this.results.length === 0);
+
       return Promise.resolve();
     }
 
@@ -292,9 +288,12 @@ export class AutoCompleteCustomElement {
     if (!this.hasEnoughCharacters()) {
       this.results = [];
       this.previousValue = this.value;
+      this.hasFocus = false;
 
       return Promise.resolve();
     }
+
+    this.hasFocus = true;
 
     // when resource is not defined it will not perform a request. Instead it
     // will search for the first items that pass the predicate
