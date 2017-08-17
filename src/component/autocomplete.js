@@ -283,6 +283,7 @@ export class AutoCompleteCustomElement {
    */
   valueChanged() {
     if (!this.shouldPerformRequest()) {
+      this.previousValue = this.value;
       return Promise.resolve();
     }
 
@@ -290,6 +291,7 @@ export class AutoCompleteCustomElement {
 
     if (!this.hasEnoughCharacters()) {
       this.results = [];
+      this.previousValue = this.value;
 
       return Promise.resolve();
     }
