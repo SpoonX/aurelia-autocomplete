@@ -223,7 +223,7 @@ export class AutoCompleteCustomElement {
       if (this.results.length !== 0 && this.hasFocus) {
         this.onSelect();
       }
-    } else {
+    } else if (event.keyCode !== 37 && event.keyCode !== 39) {
       this.setFocus(true);
     }
 
