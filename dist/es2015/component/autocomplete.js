@@ -134,14 +134,8 @@ export let AutoCompleteCustomElement = (_dec = resolvedView('spoonx/auto-complet
       return true;
     }
 
-    if (!this.hasEnoughCharacters()) {
-      this.hasFocus = false;
-
-      return true;
-    }
-
     if (value) {
-      this.valueChanged();
+      return this.valueChanged();
     }
 
     this.hasFocus = value;
@@ -190,10 +184,10 @@ export let AutoCompleteCustomElement = (_dec = resolvedView('spoonx/auto-complet
         event.preventDefault();
       }
 
-      if (this.results.length !== 0) {
+      if (this.results.length !== 0 && this.hasFocus) {
         this.onSelect();
       }
-    } else {
+    } else if (event.keyCode !== 37 && event.keyCode !== 39) {
       this.setFocus(true);
     }
 
@@ -225,6 +219,9 @@ export let AutoCompleteCustomElement = (_dec = resolvedView('spoonx/auto-complet
 
   valueChanged() {
     if (!this.shouldPerformRequest()) {
+      this.previousValue = this.value;
+      this.hasFocus = !(this.results.length === 0);
+
       return Promise.resolve();
     }
 
@@ -232,9 +229,13 @@ export let AutoCompleteCustomElement = (_dec = resolvedView('spoonx/auto-complet
 
     if (!this.hasEnoughCharacters()) {
       this.results = [];
+      this.previousValue = this.value;
+      this.hasFocus = false;
 
       return Promise.resolve();
     }
+
+    this.hasFocus = true;
 
     if (this.items) {
       this.results = this.sort(this.filter(this.items));

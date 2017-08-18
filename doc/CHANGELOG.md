@@ -1,3 +1,15 @@
+<a name="2.2.2"></a>
+## [2.2.2](https://github.com/SpoonX/aurelia-autocomplete/compare/v2.2.1...v2.2.2) (2017-08-18)
+
+
+### Bug Fixes
+
+* **dropdown:** keep the dropdown's state when using the left/right arrows ([f5a19ed](https://github.com/SpoonX/aurelia-autocomplete/commit/f5a19ed))
+* **project:** make sure to always set the previous value ([f3adc9b](https://github.com/SpoonX/aurelia-autocomplete/commit/f3adc9b))
+* **project:** set hasFocus once the value actually exists ([e8dc9f2](https://github.com/SpoonX/aurelia-autocomplete/commit/e8dc9f2))
+
+
+
 <a name="2.2.1"></a>
 ## [2.2.1](https://github.com/SpoonX/aurelia-autocomplete/compare/v2.2.0...v2.2.1) (2017-07-14)
 

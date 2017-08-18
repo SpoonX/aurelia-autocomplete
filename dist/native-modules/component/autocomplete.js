@@ -154,14 +154,8 @@ var AutoCompleteCustomElement = exports.AutoCompleteCustomElement = (_dec = (0, 
       return true;
     }
 
-    if (!this.hasEnoughCharacters()) {
-      this.hasFocus = false;
-
-      return true;
-    }
-
     if (value) {
-      this.valueChanged();
+      return this.valueChanged();
     }
 
     this.hasFocus = value;
@@ -210,10 +204,10 @@ var AutoCompleteCustomElement = exports.AutoCompleteCustomElement = (_dec = (0, 
         event.preventDefault();
       }
 
-      if (this.results.length !== 0) {
+      if (this.results.length !== 0 && this.hasFocus) {
         this.onSelect();
       }
-    } else {
+    } else if (event.keyCode !== 37 && event.keyCode !== 39) {
       this.setFocus(true);
     }
 
@@ -247,6 +241,9 @@ var AutoCompleteCustomElement = exports.AutoCompleteCustomElement = (_dec = (0, 
     var _this = this;
 
     if (!this.shouldPerformRequest()) {
+      this.previousValue = this.value;
+      this.hasFocus = !(this.results.length === 0);
+
       return Promise.resolve();
     }
 
@@ -254,9 +251,13 @@ var AutoCompleteCustomElement = exports.AutoCompleteCustomElement = (_dec = (0, 
 
     if (!this.hasEnoughCharacters()) {
       this.results = [];
+      this.previousValue = this.value;
+      this.hasFocus = false;
 
       return Promise.resolve();
     }
+
+    this.hasFocus = true;
 
     if (this.items) {
       this.results = this.sort(this.filter(this.items));
