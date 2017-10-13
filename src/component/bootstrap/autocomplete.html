@@ -27,7 +27,7 @@
       <li if.bind="lastFindPromise && results.length" role="separator" class="divider"></li>
 
       <li
-        show.bind="results.length === 0 && !lastFindPromise"
+        show.bind="results.length === 0 && lastFindPromise === false"
         class="text-muted"
         t="No results"
         css="padding: 5px 15px ${showFooter ? 0 : 5}px 15px;text-align: center;font-style: italic;"
