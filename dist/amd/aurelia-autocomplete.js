@@ -1,30 +1,16 @@
-define(['exports', './component/autocomplete', 'aurelia-view-manager', 'aurelia-logging'], function (exports, _autocomplete, _aureliaViewManager, _aureliaLogging) {
-  'use strict';
-
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  exports.logger = exports.AutoCompleteCustomElement = undefined;
-  Object.defineProperty(exports, 'AutoCompleteCustomElement', {
-    enumerable: true,
-    get: function () {
-      return _autocomplete.AutoCompleteCustomElement;
+define(["require", "exports", "aurelia-view-manager", "aurelia-logging", "./component/autocomplete"], function (require, exports, aurelia_view_manager_1, aurelia_logging_1, autocomplete_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    function configure(aurelia, configCallback) {
+        aurelia.container.get(aurelia_view_manager_1.Config).configureNamespace('spoonx/autocomplete', {
+            location: './{{framework}}/{{view}}.html'
+        });
+        if (typeof configCallback === 'function') {
+            configCallback();
+        }
+        aurelia.globalResources('./component/autocomplete');
     }
-  });
-  exports.configure = configure;
-  function configure(aurelia, configCallback) {
-    aurelia.container.get(_aureliaViewManager.Config).configureNamespace('spoonx/autocomplete', {
-      location: './{{framework}}/{{view}}.html'
-    });
-
-    if (typeof configCallback === 'function') {
-      configCallback();
-    }
-
-    aurelia.globalResources('./component/autocomplete');
-  }
-
-  var logger = (0, _aureliaLogging.getLogger)('aurelia-autocomplete');
-
-  exports.logger = logger;
+    exports.configure = configure;
+    exports.AutoCompleteCustomElement = autocomplete_1.AutoCompleteCustomElement;
+    exports.logger = aurelia_logging_1.getLogger('aurelia-autocomplete');
 });

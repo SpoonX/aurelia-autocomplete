@@ -1,74 +1,47 @@
-import {Config as ViewManager,resolvedView} from 'aurelia-view-manager';
-import {getLogger} from 'aurelia-logging';
-import {computedFrom,inject,bindable,bindingMode} from 'aurelia-framework';
-import {Config} from 'aurelia-api';
-import {DOM} from 'aurelia-pal';
-
-/* Import all modules that can be concated, eg. ValueConverters, CustomElements etc, for bundling.
- * Those also need to be added to spoonx.js 'importsToAdd' and 'jsResources' and
- * the package.json's' "aurelia.build.resources" (there without extension if view/view-model and with
- * .html extension for views without view-model).
-*/
-// // eslint-disable-line no-unused-vars
-export declare {
-  AutoCompleteCustomElement
-} from 'aurelia-autocomplete/component/autocomplete';
-export declare function configure(aurelia?: any, configCallback?: any): any;
-export declare {
-  logger
-};
+import { Config, Rest } from "aurelia-api";
 export declare class AutoCompleteCustomElement {
-  lastFindPromise: any;
-  
-  // the query string is set after selecting an option. To avoid this
-  // triggering a new query we set the justSelected to true. When true it will
-  // avoid performing a query until it is toggled of.
-  justSelected: any;
-  
-  // Holds the value last used to perform a search
-  previousValue: any;
-  
-  // Simple property that maintains if this is the initial (first) request.
-  initial: any;
-  hasFocus: any;
-  minInput: any;
-  name: any;
-  limit: any;
-  debounce: any;
-  resource: any;
-  items: any;
-  value: any;
-  selected: any;
-  attribute: any;
-  result: any;
-  results: any;
-  populate: any;
-  footerLabel: any;
-  footerSelected: any;
-  footerVisibility: any;
-  label: any;
-  endpoint: any;
-  placeholder: any;
-  sort: any;
-  criteria: any;
-  showFooter: any;
-  
-  /**
+    apiEndpoint: Rest | Config;
+    element: Element;
+    lastFindPromise: any;
+    justSelected: boolean;
+    previousValue: string | null;
+    initial: boolean;
+    hasFocus: boolean;
+    minInput: number;
+    name: string;
+    limit: number;
+    debounce: number;
+    resource: string;
+    items: any[];
+    value: string;
+    selected: any;
+    attribute: string;
+    result: null;
+    results: any[];
+    populate: null;
+    footerLabel: string;
+    footerSelected: Function;
+    footerVisibility: string;
+    label: (result: any) => any;
+    endpoint: any;
+    placeholder: string;
+    sort: (items: any[]) => any[];
+    criteria: {};
+    readonly showFooter: boolean | "" | 0;
+    /**
      * Autocomplete constructor.
      *
      * @param {Config}  api
      * @param {Element} element
      */
-  constructor(api?: any, element?: any);
-  
-  /**
+    constructor(api: Config, element: Element);
+    /**
      * Bind callback.
      *
      * @returns {void}
      */
-  bind(): any;
-  
-  /**
+    bind(): any;
+    /**
      * Set focus on dropdown.
      *
      * @param {boolean} value
@@ -76,9 +49,8 @@ export declare class AutoCompleteCustomElement {
      *
      * @returns {boolean}
      */
-  setFocus(value?: any, event?: any): any;
-  
-  /**
+    setFocus(value: boolean, event?: Event): true | Promise<void> | undefined;
+    /**
      * returns HTML that wraps matching substrings with strong tags.
      * If not a "stringable" it returns an empty string.
      *
@@ -86,27 +58,24 @@ export declare class AutoCompleteCustomElement {
      *
      * @returns {String}
      */
-  labelWithMatches(result?: any): any;
-  
-  /**
+    labelWithMatches(result: object): string;
+    /**
      * Handle keyUp events from value.
      *
      * @param {Event} event
      *
      * @returns {*}
      */
-  handleKeyUp(event?: any): any;
-  
-  /**
+    handleKeyUp(event: KeyboardEvent): true | undefined;
+    /**
      * Handle keyDown events from value.
      *
      * @param {Event} event
      *
      * @returns {*}
      */
-  handleKeyDown(event?: any): any;
-  
-  /**
+    handleKeyDown(event: KeyboardEvent): true | void;
+    /**
      * Get the next result in the list.
      *
      * @param {Object}  current    selected item
@@ -114,9 +83,8 @@ export declare class AutoCompleteCustomElement {
      *
      * @returns {Object} the next of previous item
      */
-  nextFoundResult(current?: any, reversed?: any): any;
-  
-  /**
+    nextFoundResult(current: any, reversed: boolean): any;
+    /**
      * Set the text in the input to that of the selected item and set the
      * selected item as the value. Then hide the results(dropdown)
      *
@@ -124,17 +92,15 @@ export declare class AutoCompleteCustomElement {
      *
      * @returns {boolean}
      */
-  onSelect(result?: any): any;
-  
-  /**
+    onSelect(result?: any): boolean;
+    /**
      * when search string changes perform a request, assign it to results
      * and select the first result by default.
      *
      * @returns {Promise}
      */
-  valueChanged(): any;
-  
-  /**
+    valueChanged(): Promise<void> | undefined;
+    /**
      * returns a list of length that is smaller or equal to the limit. The
      * default predicate is based on the regex
      *
@@ -142,47 +108,41 @@ export declare class AutoCompleteCustomElement {
      *
      * @returns {Object[]}
      */
-  filter(items?: any): any;
-  
-  /**
+    filter(items: any[]): any[];
+    /**
      * returns true when the finding of matching results should continue
      *
      * @param {*} item
      *
      * @return {Boolean}
      */
-  itemMatches(item?: any): any;
-  regex: any;
-  
-  /**
+    itemMatches(item: any): boolean;
+    readonly regex: RegExp;
+    /**
      * returns true when a request will be performed on a search change
      *
      * @returns {Boolean}
      */
-  shouldPerformRequest(): any;
-  
-  /**
+    shouldPerformRequest(): boolean;
+    /**
      * Returns whether or not value has enough characters (meets minInput).
      *
      * @returns {boolean}
      */
-  hasEnoughCharacters(): any;
-  
-  /**
+    hasEnoughCharacters(): boolean;
+    /**
      * @param {Object} query a waterline query object
      *
      * @returns {Promise} which resolves to the found results
      */
-  findResults(query?: any): any;
-  
-  /**
+    findResults(query: any): any;
+    /**
      * Emit custom event, or call function depending on supplied value.
      *
      * @param {string} value
      */
-  onFooterSelected(value?: any): any;
-  
-  /**
+    onFooterSelected(value: string): void;
+    /**
      * Takes a string and converts to to a waterline query object that is used to
      * perform a forgiving search.
      *
@@ -190,5 +150,15 @@ export declare class AutoCompleteCustomElement {
      *
      * @returns {Object} a waterline query object
      */
-  searchQuery(string?: any): any;
+    searchQuery(string: string): Partial<{
+        populate: string;
+        where: {
+            or: any[];
+        } | {
+            [x: string]: {
+                contains: string;
+            };
+        };
+        limit: number;
+    }>;
 }
