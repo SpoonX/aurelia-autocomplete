@@ -1,4 +1,4 @@
-const compileToModules = ['es2015', 'commonjs', 'amd', 'system'];
+const compileToModules = ['es2015', 'commonjs', 'amd', 'system', 'native-modules'];
 const base = "./";
 const paths = {
   tsConfig: base + "tsconfig.json",
@@ -26,14 +26,7 @@ compileToModules.forEach(function (moduleType) {
       .pipe(gulp.dest(paths.dist + moduleType));
   });
 
-  // if (moduleType === 'native-modules') return; // typescript doesn't support the combination of: es5 + native modules
-
   gulp.task(tsTask, function () {
-    if (moduleType === 'native-modules')
-      return srcForBabel()
-        .pipe(to5(assign({}, compilerOptions[moduleType]())))
-        .pipe(cleanGeneratedCode())
-        .pipe(gulp.dest(paths.output + moduleType));
 
     const tsProject = ts.createProject(paths.tsConfig, {
       module: moduleType,
@@ -55,7 +48,7 @@ gulp.task("clean", function () {
   return del(paths.dist)
 });
 
-gulp.task('build-new', function (callback) {
+gulp.task('build', function (callback) {
   runSequence(
     'clean',
     compileToModules.map((moduleType) => 'build-' + moduleType),

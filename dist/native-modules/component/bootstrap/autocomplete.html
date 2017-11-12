@@ -1,0 +1,56 @@
+<template>
+  <div class="dropdown open">
+    <input
+      name.bind="name"
+      class="form-control dropdown-toggle"
+      value.bind="value & debounce:debounce"
+      placeholder="${placeholder}"
+      t="[placeholder]${placeholder}"
+      type="text"
+      autocomplete="off"
+      aria-haspopup="true"
+      keydown.trigger="handleKeyDown($event)"
+      keyup.trigger="handleKeyUp($event)"
+      focus.trigger="setFocus(true, $event)"
+      blur.trigger="setFocus(false, $event)"
+      aria-expanded="true"
+    >
+    </input>
+
+    <ul show.bind="hasFocus" class="dropdown-menu">
+
+      <li if.bind="lastFindPromise" style="padding: 5px 15px 0 15px;text-align: center;font-style: italic;">
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <span t="Searching">Searching</span>...
+      </li>
+
+      <li if.bind="lastFindPromise && results.length" role="separator" class="divider"></li>
+
+      <li
+        show.bind="results.length === 0 && lastFindPromise !== undefined && !lastFindPromise"
+        class="text-muted"
+        t="No results"
+        css="padding: 5px 15px ${showFooter ? 0 : 5}px 15px;text-align: center;font-style: italic;"
+      >
+        <span t="No results"></span>
+      </li>
+
+      <template containerless repeat.for="result of results">
+        <li
+          click.trigger="onSelect(result)"
+          style="cursor:pointer"
+          class="${result === selected ? 'au-target active' : 'au-target'}"
+          aria-expanded="true"
+        >
+          <a href="javascript: void(0)" innerhtml.bind="labelWithMatches(result)"></a>
+        </li>
+      </template>
+      <li if.bind="showFooter" role="separator" class="divider"></li>
+      <li if.bind="showFooter" style="padding: 0 9px 4px 9px;" click.trigger="onFooterSelected(value)">
+        <button class="btn btn-success btn-xs btn-block" blur.trigger="setFocus(false, $event)" type="button">
+          <span t="${footerLabel}">${footerLabel}</span>
+        </button>
+      </li>
+    </ul>
+  </div>
+</template>

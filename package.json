@@ -11,7 +11,7 @@
   ],
   "homepage": "https://github.com/SpoonX/aurelia-autocomplete#readme",
   "main": "dist/commonjs/aurelia-autocomplete.js",
-  "typings": "dist/aurelia-autocomplete.d.ts",
+  "typings": "dist/definitions/aurelia-autocomplete.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/SpoonX/aurelia-autocomplete.git"
