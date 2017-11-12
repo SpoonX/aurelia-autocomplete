@@ -4,9 +4,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
 define(["require", "exports", "aurelia-framework", "aurelia-api", "../aurelia-autocomplete", "aurelia-pal", "aurelia-view-manager"], function (require, exports, aurelia_framework_1, aurelia_api_1, aurelia_autocomplete_1, aurelia_pal_1, aurelia_view_manager_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -366,102 +363,76 @@ define(["require", "exports", "aurelia-framework", "aurelia-api", "../aurelia-au
             var _a;
         };
         __decorate([
-            aurelia_framework_1.bindable,
-            __metadata("design:type", Object)
+            aurelia_framework_1.bindable
         ], AutoCompleteCustomElement.prototype, "minInput", void 0);
         __decorate([
-            aurelia_framework_1.bindable,
-            __metadata("design:type", Object)
+            aurelia_framework_1.bindable
         ], AutoCompleteCustomElement.prototype, "name", void 0);
         __decorate([
-            aurelia_framework_1.bindable,
-            __metadata("design:type", Object)
+            aurelia_framework_1.bindable
         ], AutoCompleteCustomElement.prototype, "limit", void 0);
         __decorate([
-            aurelia_framework_1.bindable,
-            __metadata("design:type", Object)
+            aurelia_framework_1.bindable
         ], AutoCompleteCustomElement.prototype, "debounce", void 0);
         __decorate([
-            aurelia_framework_1.bindable,
-            __metadata("design:type", String)
+            aurelia_framework_1.bindable
         ], AutoCompleteCustomElement.prototype, "resource", void 0);
         __decorate([
-            aurelia_framework_1.bindable,
-            __metadata("design:type", Array)
+            aurelia_framework_1.bindable
         ], AutoCompleteCustomElement.prototype, "items", void 0);
         __decorate([
-            aurelia_framework_1.bindable({ defaultBindingMode: aurelia_framework_1.bindingMode.twoWay }),
-            __metadata("design:type", Object)
+            aurelia_framework_1.bindable({ defaultBindingMode: aurelia_framework_1.bindingMode.twoWay })
         ], AutoCompleteCustomElement.prototype, "value", void 0);
         __decorate([
-            aurelia_framework_1.bindable,
-            __metadata("design:type", Object)
+            aurelia_framework_1.bindable
         ], AutoCompleteCustomElement.prototype, "selected", void 0);
         __decorate([
-            aurelia_framework_1.bindable,
-            __metadata("design:type", Object)
+            aurelia_framework_1.bindable
         ], AutoCompleteCustomElement.prototype, "attribute", void 0);
         __decorate([
-            aurelia_framework_1.bindable({ defaultBindingMode: aurelia_framework_1.bindingMode.twoWay }),
-            __metadata("design:type", Object)
+            aurelia_framework_1.bindable({ defaultBindingMode: aurelia_framework_1.bindingMode.twoWay })
         ], AutoCompleteCustomElement.prototype, "result", void 0);
         __decorate([
-            aurelia_framework_1.bindable({ defaultBindingMode: aurelia_framework_1.bindingMode.twoWay }),
-            __metadata("design:type", Array)
+            aurelia_framework_1.bindable({ defaultBindingMode: aurelia_framework_1.bindingMode.twoWay })
         ], AutoCompleteCustomElement.prototype, "results", void 0);
         __decorate([
-            aurelia_framework_1.bindable,
-            __metadata("design:type", Object)
+            aurelia_framework_1.bindable
         ], AutoCompleteCustomElement.prototype, "populate", void 0);
         __decorate([
-            aurelia_framework_1.bindable,
-            __metadata("design:type", Object)
+            aurelia_framework_1.bindable
         ], AutoCompleteCustomElement.prototype, "footerLabel", void 0);
         __decorate([
-            aurelia_framework_1.bindable,
-            __metadata("design:type", Function)
+            aurelia_framework_1.bindable
         ], AutoCompleteCustomElement.prototype, "footerSelected", void 0);
         __decorate([
-            aurelia_framework_1.bindable,
-            __metadata("design:type", Object)
+            aurelia_framework_1.bindable
         ], AutoCompleteCustomElement.prototype, "footerVisibility", void 0);
         __decorate([
-            aurelia_framework_1.bindable,
-            __metadata("design:type", Object)
+            aurelia_framework_1.bindable
         ], AutoCompleteCustomElement.prototype, "label", void 0);
         __decorate([
-            aurelia_framework_1.bindable,
-            __metadata("design:type", Object)
+            aurelia_framework_1.bindable
         ], AutoCompleteCustomElement.prototype, "endpoint", void 0);
         __decorate([
-            aurelia_framework_1.bindable,
-            __metadata("design:type", Object)
+            aurelia_framework_1.bindable
         ], AutoCompleteCustomElement.prototype, "placeholder", void 0);
         __decorate([
-            aurelia_framework_1.bindable,
-            __metadata("design:type", Object)
+            aurelia_framework_1.bindable
         ], AutoCompleteCustomElement.prototype, "sort", void 0);
         __decorate([
-            aurelia_framework_1.bindable,
-            __metadata("design:type", Object)
+            aurelia_framework_1.bindable
         ], AutoCompleteCustomElement.prototype, "criteria", void 0);
         __decorate([
-            aurelia_framework_1.computedFrom('results', 'value'),
-            __metadata("design:type", Object),
-            __metadata("design:paramtypes", [])
+            aurelia_framework_1.computedFrom('results', 'value')
         ], AutoCompleteCustomElement.prototype, "showFooter", null);
         __decorate([
-            aurelia_framework_1.computedFrom('value'),
-            __metadata("design:type", Object),
-            __metadata("design:paramtypes", [])
+            aurelia_framework_1.computedFrom('value')
         ], AutoCompleteCustomElement.prototype, "regex", null);
         AutoCompleteCustomElement = __decorate([
             aurelia_view_manager_1.resolvedView('spoonx/auto-complete', 'autocomplete'),
-            aurelia_framework_1.inject(aurelia_api_1.Config, aurelia_pal_1.DOM.Element),
-            __metadata("design:paramtypes", [typeof (_a = typeof aurelia_api_1.Config !== "undefined" && aurelia_api_1.Config) === "function" && _a || Object, Element])
+            aurelia_framework_1.inject(aurelia_api_1.Config, aurelia_pal_1.DOM.Element)
         ], AutoCompleteCustomElement);
         return AutoCompleteCustomElement;
-        var _a;
     }());
     exports.AutoCompleteCustomElement = AutoCompleteCustomElement;
 });

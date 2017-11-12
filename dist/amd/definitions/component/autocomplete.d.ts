@@ -40,7 +40,7 @@ export declare class AutoCompleteCustomElement {
      *
      * @returns {void}
      */
-    bind(): any;
+    bind(): void;
     /**
      * Set focus on dropdown.
      *
@@ -135,7 +135,7 @@ export declare class AutoCompleteCustomElement {
      *
      * @returns {Promise} which resolves to the found results
      */
-    findResults(query: any): any;
+    findResults(query: any): Promise<any>;
     /**
      * Emit custom event, or call function depending on supplied value.
      *

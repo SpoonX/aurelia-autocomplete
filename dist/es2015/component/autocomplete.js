@@ -4,9 +4,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
 import { computedFrom, inject, bindable, bindingMode } from "aurelia-framework";
 import { Config } from "aurelia-api";
 import { logger } from "../aurelia-autocomplete";
@@ -356,99 +353,73 @@ let AutoCompleteCustomElement = class AutoCompleteCustomElement {
     }
 };
 __decorate([
-    bindable,
-    __metadata("design:type", Object)
+    bindable
 ], AutoCompleteCustomElement.prototype, "minInput", void 0);
 __decorate([
-    bindable,
-    __metadata("design:type", Object)
+    bindable
 ], AutoCompleteCustomElement.prototype, "name", void 0);
 __decorate([
-    bindable,
-    __metadata("design:type", Object)
+    bindable
 ], AutoCompleteCustomElement.prototype, "limit", void 0);
 __decorate([
-    bindable,
-    __metadata("design:type", Object)
+    bindable
 ], AutoCompleteCustomElement.prototype, "debounce", void 0);
 __decorate([
-    bindable,
-    __metadata("design:type", String)
+    bindable
 ], AutoCompleteCustomElement.prototype, "resource", void 0);
 __decorate([
-    bindable,
-    __metadata("design:type", Array)
+    bindable
 ], AutoCompleteCustomElement.prototype, "items", void 0);
 __decorate([
-    bindable({ defaultBindingMode: bindingMode.twoWay }),
-    __metadata("design:type", Object)
+    bindable({ defaultBindingMode: bindingMode.twoWay })
 ], AutoCompleteCustomElement.prototype, "value", void 0);
 __decorate([
-    bindable,
-    __metadata("design:type", Object)
+    bindable
 ], AutoCompleteCustomElement.prototype, "selected", void 0);
 __decorate([
-    bindable,
-    __metadata("design:type", Object)
+    bindable
 ], AutoCompleteCustomElement.prototype, "attribute", void 0);
 __decorate([
-    bindable({ defaultBindingMode: bindingMode.twoWay }),
-    __metadata("design:type", Object)
+    bindable({ defaultBindingMode: bindingMode.twoWay })
 ], AutoCompleteCustomElement.prototype, "result", void 0);
 __decorate([
-    bindable({ defaultBindingMode: bindingMode.twoWay }),
-    __metadata("design:type", Array)
+    bindable({ defaultBindingMode: bindingMode.twoWay })
 ], AutoCompleteCustomElement.prototype, "results", void 0);
 __decorate([
-    bindable,
-    __metadata("design:type", Object)
+    bindable
 ], AutoCompleteCustomElement.prototype, "populate", void 0);
 __decorate([
-    bindable,
-    __metadata("design:type", Object)
+    bindable
 ], AutoCompleteCustomElement.prototype, "footerLabel", void 0);
 __decorate([
-    bindable,
-    __metadata("design:type", Function)
+    bindable
 ], AutoCompleteCustomElement.prototype, "footerSelected", void 0);
 __decorate([
-    bindable,
-    __metadata("design:type", Object)
+    bindable
 ], AutoCompleteCustomElement.prototype, "footerVisibility", void 0);
 __decorate([
-    bindable,
-    __metadata("design:type", Object)
+    bindable
 ], AutoCompleteCustomElement.prototype, "label", void 0);
 __decorate([
-    bindable,
-    __metadata("design:type", Object)
+    bindable
 ], AutoCompleteCustomElement.prototype, "endpoint", void 0);
 __decorate([
-    bindable,
-    __metadata("design:type", Object)
+    bindable
 ], AutoCompleteCustomElement.prototype, "placeholder", void 0);
 __decorate([
-    bindable,
-    __metadata("design:type", Object)
+    bindable
 ], AutoCompleteCustomElement.prototype, "sort", void 0);
 __decorate([
-    bindable,
-    __metadata("design:type", Object)
+    bindable
 ], AutoCompleteCustomElement.prototype, "criteria", void 0);
 __decorate([
-    computedFrom('results', 'value'),
-    __metadata("design:type", Object),
-    __metadata("design:paramtypes", [])
+    computedFrom('results', 'value')
 ], AutoCompleteCustomElement.prototype, "showFooter", null);
 __decorate([
-    computedFrom('value'),
-    __metadata("design:type", Object),
-    __metadata("design:paramtypes", [])
+    computedFrom('value')
 ], AutoCompleteCustomElement.prototype, "regex", null);
 AutoCompleteCustomElement = __decorate([
     resolvedView('spoonx/auto-complete', 'autocomplete'),
-    inject(Config, DOM.Element),
-    __metadata("design:paramtypes", [typeof (_a = typeof Config !== "undefined" && Config) === "function" && _a || Object, Element])
+    inject(Config, DOM.Element)
 ], AutoCompleteCustomElement);
 export { AutoCompleteCustomElement };
-var _a;
