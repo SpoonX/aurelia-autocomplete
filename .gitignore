@@ -6,3 +6,4 @@ bower_components
 build/reports
 npm-debug.log
 *.orig
+.vs
