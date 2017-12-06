@@ -1,3 +1,13 @@
+<a name="2.2.4"></a>
+## [2.2.4](https://github.com/SpoonX/aurelia-autocomplete/compare/v2.2.3...v2.2.4) (2017-12-06)
+
+
+### Bug Fixes
+
+* safari blur bug ([8427e1a](https://github.com/SpoonX/aurelia-autocomplete/commit/8427e1a))
+
+
+
 <a name="2.2.3"></a>
 ## [2.2.3](https://github.com/SpoonX/aurelia-autocomplete/compare/v2.2.2...v2.2.3) (2017-10-16)
 

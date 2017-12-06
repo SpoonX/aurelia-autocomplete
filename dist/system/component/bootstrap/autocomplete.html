@@ -12,7 +12,7 @@
       keydown.trigger="handleKeyDown($event)"
       keyup.trigger="handleKeyUp($event)"
       focus.trigger="setFocus(true, $event)"
-      blur.trigger="setFocus(false, $event)"
+      blur.trigger="setFocus(false, $event) & debounce:debounce"
       aria-expanded="true"
     >
     </input>
