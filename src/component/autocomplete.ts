@@ -1,14 +1,16 @@
-import {computedFrom, inject, bindable, bindingMode} from "aurelia-framework";
-import {Config} from "aurelia-api";
-import {logger} from "../aurelia-autocomplete";
-import {DOM} from "aurelia-pal";
-import {resolvedView} from "aurelia-view-manager";
+import { computedFrom, inject, bindable, bindingMode } from "aurelia-framework";
+import { Config, Rest } from "aurelia-api";
+import { logger } from "../aurelia-autocomplete";
+import { DOM } from "aurelia-pal";
+import { resolvedView } from "aurelia-view-manager";
 
 @resolvedView('spoonx/auto-complete', 'autocomplete')
 @inject(Config, DOM.Element)
 export class AutoCompleteCustomElement {
+  apiEndpoint: Rest | Config;
+  element: Element;
 
-  lastFindPromise;
+  lastFindPromise: any;
 
   // the query string is set after selecting an option. To avoid this
   // triggering a new query we set the justSelected to true. When true it will
@@ -16,7 +18,7 @@ export class AutoCompleteCustomElement {
   justSelected = false;
 
   // Holds the value last used to perform a search
-  previousValue = null;
+  previousValue: string | null = null;
 
   // Simple property that maintains if this is the initial (first) request.
   initial = true;
@@ -36,25 +38,25 @@ export class AutoCompleteCustomElement {
   @bindable debounce = 100;
 
   // The string that is appended to the api endpoint. e.g. api.com/language. language is the resource.
-  @bindable resource;
+  @bindable resource: string;
 
   // Used when one already has a list of items to filter on. Requests is not necessary
-  @bindable items;
+  @bindable items: any[];
 
   // The string to be used to do a contains search with. By default it will look if the name contains this value.
-  @bindable({defaultBindingMode: bindingMode.twoWay}) value = '';
+  @bindable({ defaultBindingMode: bindingMode.twoWay }) value = '';
 
   // Can be used to select default element visually
-  @bindable selected;
+  @bindable selected: any;
 
   // The property to query on.
   @bindable attribute = 'name';
 
   // Used to pass the result of the selected value to the user's view model
-  @bindable({defaultBindingMode: bindingMode.twoWay}) result = null;
+  @bindable({ defaultBindingMode: bindingMode.twoWay }) result = null;
 
   // The results returned from the endpoint. These can be observed and mutated.
-  @bindable({defaultBindingMode: bindingMode.twoWay}) results = [];
+  @bindable({ defaultBindingMode: bindingMode.twoWay }) results: any[] = [];
 
   // Which relations to populate for results
   @bindable populate = null;
@@ -63,26 +65,26 @@ export class AutoCompleteCustomElement {
   @bindable footerLabel = 'Create';
 
   // Callback to call when the footer gets clicked.
-  @bindable footerSelected;
+  @bindable footerSelected: Function;
 
   // Never, always or no-results
   @bindable footerVisibility = 'never';
 
   // Used to determine the string to be shown as option label
-  @bindable label = result => {
+  @bindable label = (result: any) => {
     let defaultAttribute = Array.isArray(this.attribute) ? this.attribute[0] || 'name' : this.attribute;
 
     return typeof result === 'object' && result !== null ? result[defaultAttribute] : result;
   };
 
   // Allow to overwrite the default apiEndpoint
-  @bindable endpoint;
+  @bindable endpoint: any;
 
   // Input field's placeholder
   @bindable placeholder = 'Search';
 
   // Sort method that takes a list and returns a sorted list. No sorting by default.
-  @bindable sort = items => items;
+  @bindable sort = (items: any[]) => items;
 
   // Used to make the criteria more specific
   @bindable criteria = {};
@@ -101,8 +103,8 @@ export class AutoCompleteCustomElement {
    * @param {Config}  api
    * @param {Element} element
    */
-  constructor(api, element) {
-    this.element     = element;
+  constructor(api: Config, element: Element) {
+    this.element = element;
     this.apiEndpoint = api;
   }
 
@@ -116,8 +118,8 @@ export class AutoCompleteCustomElement {
       return logger.error('auto complete requires resource or items bindable to be defined');
     }
 
-    this.value       = this.label(this.result);
-    this.apiEndpoint = this.apiEndpoint.getEndpoint(this.endpoint);
+    this.value = this.label(this.result);
+    this.apiEndpoint = (<Config>this.apiEndpoint).getEndpoint(this.endpoint);
   }
 
   /**
@@ -128,8 +130,8 @@ export class AutoCompleteCustomElement {
    *
    * @returns {boolean}
    */
-  setFocus(value, event) {
-    function isDescendant(parent, child) {
+  setFocus(value: boolean, event?: Event): true | Promise<void> | undefined {
+    function isDescendant(parent: Element, child: Element) {
       let node = child.parentNode;
 
       while (node !== null) {
@@ -144,7 +146,7 @@ export class AutoCompleteCustomElement {
     }
 
     // If descendant, don't toggle dropdown so that other listeners will be called.
-    if (event && event.relatedTarget && isDescendant(this.element, event.relatedTarget)) {
+    if (event && (<any>event).relatedTarget && isDescendant(this.element, (<any>event).relatedTarget)) {
       return true;
     }
 
@@ -163,7 +165,7 @@ export class AutoCompleteCustomElement {
    *
    * @returns {String}
    */
-  labelWithMatches(result) {
+  labelWithMatches(result: object) {
     let label = this.label(result);
 
     if (typeof label !== 'string') {
@@ -182,7 +184,7 @@ export class AutoCompleteCustomElement {
    *
    * @returns {*}
    */
-  handleKeyUp(event) {
+  handleKeyUp(event: KeyboardEvent) {
     if (event.keyCode !== 27) {
       return;
     }
@@ -203,7 +205,7 @@ export class AutoCompleteCustomElement {
    *
    * @returns {*}
    */
-  handleKeyDown(event) {
+  handleKeyDown(event: KeyboardEvent) {
     if (event.keyCode === 27) {
       return;
     }
@@ -238,7 +240,7 @@ export class AutoCompleteCustomElement {
    *
    * @returns {Object} the next of previous item
    */
-  nextFoundResult(current, reversed) {
+  nextFoundResult(current: any, reversed: boolean) {
     let index = (this.results.indexOf(current) + (reversed ? -1 : 1)) % (this.results.length);
 
     if (index < 0) {
@@ -256,13 +258,13 @@ export class AutoCompleteCustomElement {
    *
    * @returns {boolean}
    */
-  onSelect(result) {
-    result             = (arguments.length === 0) ? this.selected : result;
-    this.justSelected  = true;
-    this.value         = this.label(result);
+  onSelect(result?: any) {
+    result = (arguments.length === 0) ? this.selected : result;
+    this.justSelected = true;
+    this.value = this.label(result);
     this.previousValue = this.value;
-    this.result        = result;
-    this.selected      = this.result;
+    this.result = result;
+    this.selected = this.result;
 
     this.setFocus(false);
 
@@ -275,7 +277,7 @@ export class AutoCompleteCustomElement {
    *
    * @returns {Promise}
    */
-  valueChanged() {
+  valueChanged(): Promise<void> | undefined {
     if (!this.shouldPerformRequest()) {
       this.previousValue = this.value;
       this.hasFocus = !(this.results.length === 0);
@@ -304,14 +306,14 @@ export class AutoCompleteCustomElement {
     }
 
     let lastFindPromise = this.findResults(this.searchQuery(this.value))
-      .then(results => {
+      .then((results: any) => {
         if (this.lastFindPromise !== lastFindPromise) {
           return;
         }
 
-        this.previousValue   = this.value;
+        this.previousValue = this.value;
         this.lastFindPromise = false;
-        this.results         = this.sort(results || []);
+        this.results = this.sort(results || []);
 
         if (this.results.length !== 0) {
           this.selected = this.results[0];
@@ -329,8 +331,8 @@ export class AutoCompleteCustomElement {
    *
    * @returns {Object[]}
    */
-  filter(items) {
-    let results = [];
+  filter(items: any[]) {
+    let results: any[] = [];
 
     items.some(item => {
       // add an item if it matches
@@ -351,7 +353,7 @@ export class AutoCompleteCustomElement {
    *
    * @return {Boolean}
    */
-  itemMatches(item) {
+  itemMatches(item: any) {
     return this.regex.test(this.label(item));
   }
 
@@ -395,8 +397,8 @@ export class AutoCompleteCustomElement {
    *
    * @returns {Promise} which resolves to the found results
    */
-  findResults(query) {
-    return this.apiEndpoint.find(this.resource, query)
+  findResults(query: any) {
+    return (<Rest>this.apiEndpoint).find(this.resource, query)
       .catch(err => logger.error('not able to find results', err));
   }
 
@@ -405,7 +407,7 @@ export class AutoCompleteCustomElement {
    *
    * @param {string} value
    */
-  onFooterSelected(value) {
+  onFooterSelected(value: string) {
     if (typeof this.footerSelected === 'function') {
       this.footerSelected(value);
 
@@ -413,7 +415,7 @@ export class AutoCompleteCustomElement {
     }
 
     this.element.dispatchEvent(
-      DOM.createCustomEvent('footer-selected', {detail: {value}})
+      DOM.createCustomEvent('footer-selected', { detail: { value } })
     );
   }
 
@@ -425,27 +427,31 @@ export class AutoCompleteCustomElement {
    *
    * @returns {Object} a waterline query object
    */
-  searchQuery(string) {
-    let ors = [];
+  searchQuery(string: string) {
+    let ors: any[] = [];
     let where;
 
     if (Array.isArray(this.attribute)) {
       this.attribute.forEach(attribute => {
-        ors.push({[attribute]: {contains: string}});
+        ors.push({ [attribute]: { contains: string } });
       });
     } else {
-      where = {[this.attribute]: {contains: string}};
+      where = { [this.attribute]: { contains: string } };
     }
 
     let mergedWhere = Object.assign(
-      Array.isArray(this.attribute) ? {or: ors} : where,
+      Array.isArray(this.attribute) ? { or: ors } : where,
       this.criteria
     );
 
-    let query = {
-      populate: this.populate || 'null',
-      where   : mergedWhere
-    };
+    let query: Partial<{
+      populate: string,
+      where: { or: any[] } | { [x: string]: { contains: string; } },
+      limit: number
+    }> = {
+        populate: this.populate || 'null',
+        where: mergedWhere
+      };
 
     // only assign limit to query if it is defined. Allows to default to server
     // limit when limit bindable is set to falsy value
