@@ -387,7 +387,13 @@ export class AutoCompleteCustomElement {
    * @returns {boolean}
    */
   hasEnoughCharacters() {
-    return ((this.value && this.value.length) || 0) >= this.minInput;
+    let minInput;
+    if (typeof this.minInput === 'string') {
+      minInput = Number.parseInt(this.minInput);
+    } else {
+      minInput = this.minInput;
+    }
+    return ((this.value && this.value.length) || 0) >= minInput;
   }
 
   /**
