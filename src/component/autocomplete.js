@@ -270,7 +270,7 @@ export class AutoCompleteCustomElement {
   }
 
   resultChanged() {
-    if (this.selected != this.result) {
+    if (this.selected !== this.result) {
       this.onSelect(this.result);
     }
   }
