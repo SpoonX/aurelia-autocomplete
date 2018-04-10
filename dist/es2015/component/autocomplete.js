@@ -149,7 +149,7 @@ export let AutoCompleteCustomElement = (_dec = resolvedView('spoonx/auto-complet
     }
 
     return label.replace(this.regex, match => {
-      return `<strong>${ match }</strong>`;
+      return `<strong>${match}</strong>`;
     });
   }
 
