@@ -231,12 +231,18 @@ var AutoCompleteCustomElement = exports.AutoCompleteCustomElement = (_dec = (0, 
     this.justSelected = true;
     this.value = this.label(result);
     this.previousValue = this.value;
+    this.selected = result;
     this.result = result;
-    this.selected = this.result;
 
     this.setFocus(false);
 
     return true;
+  };
+
+  AutoCompleteCustomElement.prototype.resultChanged = function resultChanged() {
+    if (this.selected !== this.result) {
+      this.onSelect(this.result);
+    }
   };
 
   AutoCompleteCustomElement.prototype.valueChanged = function valueChanged() {

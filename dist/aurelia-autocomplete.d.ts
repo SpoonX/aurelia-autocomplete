@@ -125,6 +125,7 @@ export declare class AutoCompleteCustomElement {
      * @returns {boolean}
      */
   onSelect(result?: any): any;
+  resultChanged(): any;
   
   /**
      * when search string changes perform a request, assign it to results

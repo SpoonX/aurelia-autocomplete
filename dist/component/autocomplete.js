@@ -261,12 +261,18 @@ export class AutoCompleteCustomElement {
     this.justSelected  = true;
     this.value         = this.label(result);
     this.previousValue = this.value;
+    this.selected      = result;
     this.result        = result;
-    this.selected      = this.result;
 
     this.setFocus(false);
 
     return true;
+  }
+
+  resultChanged() {
+    if (this.selected !== this.result) {
+      this.onSelect(this.result);
+    }
   }
 
   /**

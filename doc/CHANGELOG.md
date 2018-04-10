@@ -1,3 +1,13 @@
+<a name="3.0.0-1"></a>
+# [3.0.0-1](https://github.com/SpoonX/aurelia-autocomplete/compare/v3.0.0-0...v3.0.0-1) (2018-04-10)
+
+
+### Bug Fixes
+
+* **project:** added resultChanged handler to update the autocomplete view ([b02dfb6](https://github.com/SpoonX/aurelia-autocomplete/commit/b02dfb6))
+
+
+
 <a name="3.0.0-0"></a>
 # [3.0.0-0](https://github.com/SpoonX/aurelia-autocomplete/compare/v2.2.4...v3.0.0-0) (2018-04-10)
 
