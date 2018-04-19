@@ -1,3 +1,13 @@
+<a name="3.0.0-2"></a>
+# [3.0.0-2](https://github.com/SpoonX/aurelia-autocomplete/compare/v3.0.0-1...v3.0.0-2) (2018-04-19)
+
+
+### Bug Fixes
+
+* **project:** prevent autocomplete options from being uncollapsed initially ([2a3fa37](https://github.com/SpoonX/aurelia-autocomplete/commit/2a3fa37))
+
+
+
 <a name="3.0.0-1"></a>
 # [3.0.0-1](https://github.com/SpoonX/aurelia-autocomplete/compare/v3.0.0-0...v3.0.0-1) (2018-04-10)
 

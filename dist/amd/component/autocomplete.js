@@ -259,9 +259,11 @@ define(["exports", "aurelia-framework", "aurelia-api", "../aurelia-autocomplete"
     AutoCompleteCustomElement.prototype.valueChanged = function valueChanged() {
       var _this = this;
 
+      var initial = this.initial;
+
       if (!this.shouldPerformRequest()) {
         this.previousValue = this.value;
-        this.hasFocus = !(this.results.length === 0);
+        this.hasFocus = !initial && !(this.results.length === 0);
 
         return Promise.resolve();
       }
@@ -331,7 +333,7 @@ define(["exports", "aurelia-framework", "aurelia-api", "../aurelia-autocomplete"
       if (this.initial) {
         this.initial = false;
 
-        return true;
+        return false;
       }
 
       return this.value !== this.previousValue;

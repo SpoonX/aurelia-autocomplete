@@ -224,9 +224,11 @@ export let AutoCompleteCustomElement = (_dec = resolvedView('spoonx/auto-complet
   }
 
   valueChanged() {
+    let initial = this.initial;
+
     if (!this.shouldPerformRequest()) {
       this.previousValue = this.value;
-      this.hasFocus = !(this.results.length === 0);
+      this.hasFocus = !initial && !(this.results.length === 0);
 
       return Promise.resolve();
     }
@@ -298,7 +300,7 @@ export let AutoCompleteCustomElement = (_dec = resolvedView('spoonx/auto-complet
     if (this.initial) {
       this.initial = false;
 
-      return true;
+      return false;
     }
 
     return this.value !== this.previousValue;
