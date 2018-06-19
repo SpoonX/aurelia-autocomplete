@@ -21,6 +21,9 @@ export class AutoCompleteCustomElement {
   // Simple property that maintains if this is the initial (first) request.
   initial = true;
 
+  dropdownToggle;
+  dropdownMenu;
+
   hasFocus = false;
 
   // How many characters are required to type before starting a search.
@@ -95,6 +98,12 @@ export class AutoCompleteCustomElement {
       || (visibility === 'no-results' && this.value && this.value.length && (!this.results || !this.results.length));
   }
 
+  showDropdown() {
+    if (!this.dropdownMenu.hasClass('show')) {
+      this.dropdownToggle.dropdown('toggle');
+    }
+  }
+
   /**
    * Autocomplete constructor.
    *
@@ -120,6 +129,8 @@ export class AutoCompleteCustomElement {
     if (this.apiEndpoint) {
       this.apiEndpoint = this.apiEndpoint.getEndpoint(this.endpoint);
     }
+    this.dropdownToggle = $(this.dropdownToggle);
+    this.dropdownMenu = $(this.dropdownToggle.parent().find('.dropdown-menu')[0]);
   }
 
   /**
@@ -226,6 +237,10 @@ export class AutoCompleteCustomElement {
         this.onSelect();
       }
     } else if (event.keyCode !== 37 && event.keyCode !== 39) {
+      // ensure dropdown is uncollapsed when there are results while user types
+      if (this.results.length > 0) {
+        this.showDropdown();
+      }
       this.setFocus(true);
     }
 
