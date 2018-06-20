@@ -117,7 +117,9 @@ export class AutoCompleteCustomElement {
     }
 
     this.value       = this.label(this.result);
-    this.apiEndpoint = this.apiEndpoint.getEndpoint(this.endpoint);
+    if (this.apiEndpoint) {
+      this.apiEndpoint = this.apiEndpoint.getEndpoint(this.endpoint);
+    }
   }
 
   /**
