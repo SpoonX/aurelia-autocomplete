@@ -112,7 +112,9 @@ export let AutoCompleteCustomElement = (_dec = resolvedView('spoonx/auto-complet
     }
 
     this.value = this.label(this.result);
-    this.apiEndpoint = this.apiEndpoint.getEndpoint(this.endpoint);
+    if (this.apiEndpoint) {
+      this.apiEndpoint = this.apiEndpoint.getEndpoint(this.endpoint);
+    }
   }
 
   setFocus(value, event) {

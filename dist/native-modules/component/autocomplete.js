@@ -132,7 +132,9 @@ var AutoCompleteCustomElement = exports.AutoCompleteCustomElement = (_dec = (0, 
     }
 
     this.value = this.label(this.result);
-    this.apiEndpoint = this.apiEndpoint.getEndpoint(this.endpoint);
+    if (this.apiEndpoint) {
+      this.apiEndpoint = this.apiEndpoint.getEndpoint(this.endpoint);
+    }
   };
 
   AutoCompleteCustomElement.prototype.setFocus = function setFocus(value, event) {

@@ -1,3 +1,18 @@
+<a name="3.0.0"></a>
+# [3.0.0](https://github.com/SpoonX/aurelia-autocomplete/compare/v3.0.0-2...v3.0.0) (2018-06-20)
+
+
+### Bug Fixes
+
+* **autocomplete:** only init endpoint when set ([463e0e0](https://github.com/SpoonX/aurelia-autocomplete/commit/463e0e0))
+
+
+### Features
+
+* **autocomplete:** add bootstrap v4 support ([1119a02](https://github.com/SpoonX/aurelia-autocomplete/commit/1119a02))
+
+
+
 <a name="3.0.0-2"></a>
 # [3.0.0-2](https://github.com/SpoonX/aurelia-autocomplete/compare/v3.0.0-1...v3.0.0-2) (2018-04-19)
 

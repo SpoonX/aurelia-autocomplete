@@ -158,7 +158,9 @@ System.register(["aurelia-framework", "aurelia-api", "../aurelia-autocomplete", 
           }
 
           this.value = this.label(this.result);
-          this.apiEndpoint = this.apiEndpoint.getEndpoint(this.endpoint);
+          if (this.apiEndpoint) {
+            this.apiEndpoint = this.apiEndpoint.getEndpoint(this.endpoint);
+          }
         };
 
         AutoCompleteCustomElement.prototype.setFocus = function setFocus(value, event) {

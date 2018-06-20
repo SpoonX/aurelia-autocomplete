@@ -1,0 +1,51 @@
+<template>
+  <div class="dropdown open">
+    <input
+      name.bind="name"
+      class="form-control dropdown-toggle"
+      value.bind="value & debounce:debounce"
+      placeholder="${placeholder}"
+      t="[placeholder]${placeholder}"
+      type="text"
+      autocomplete="off"
+      aria-haspopup="true"
+      keydown.trigger="handleKeyDown($event)"
+      keyup.trigger="handleKeyUp($event)"
+      focus.trigger="setFocus(true, $event)"
+      blur.trigger="setFocus(false, $event) & debounce:debounce"
+      aria-expanded.bind="hasFocus"
+      data-toggle="dropdown"
+      aria-haspopup="true"
+    >
+    </input>
+
+    <div show.bind="hasFocus" class="dropdown-menu">
+
+      <a if.bind="lastFindPromise" style="padding: 5px 15px 0 15px;text-align: center;font-style: italic;">
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <span t="Searching">Searching</span>...
+      </a>
+
+      <div if.bind="lastFindPromise && results.length" class="dropdown-divider"></div>
+
+      <a
+        show.bind="results.length === 0 && lastFindPromise !== undefined && !lastFindPromise"
+        class="dropdown-item text-muted"
+        t="No results"
+        css="padding: 5px 15px ${showFooter ? 0 : 5}px 15px;text-align: center;font-style: italic;"
+      >
+        <span t="No results"></span>
+      </a>
+
+      <template containerless repeat.for="result of results">
+        <a click.trigger="onSelect(result)" class="dropdown-item ${result === selected ? 'au-target active' : 'au-target'}" href="javascript: void(0)" innerhtml.bind="labelWithMatches(result)"></a>
+      </template>
+      <div if.bind="showFooter" class="dropdown-divider"></div>
+      <a if.bind="showFooter" style="padding: 0 9px 4px 9px;" click.trigger="onFooterSelected(value)">
+        <button class="btn btn-success btn-xs btn-block" blur.trigger="setFocus(false, $event)" type="button">
+          <span t="${footerLabel}">${footerLabel}</span>
+        </button>
+      </a>
+    </div>
+  </div>
+</template>
