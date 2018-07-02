@@ -91,6 +91,12 @@ System.register(["aurelia-framework", "aurelia-api", "../aurelia-autocomplete", 
       }();
 
       _export("AutoCompleteCustomElement", AutoCompleteCustomElement = (_dec = resolvedView('spoonx/auto-complete', 'autocomplete'), _dec2 = inject(Config, DOM.Element), _dec3 = bindable({ defaultBindingMode: bindingMode.twoWay }), _dec4 = bindable({ defaultBindingMode: bindingMode.twoWay }), _dec5 = bindable({ defaultBindingMode: bindingMode.twoWay }), _dec6 = computedFrom('results', 'value'), _dec7 = computedFrom('value'), _dec(_class = _dec2(_class = (_class2 = function () {
+        AutoCompleteCustomElement.prototype.showDropdown = function showDropdown() {
+          if (!this.dropdownMenu.hasClass('show')) {
+            this.dropdownToggle.dropdown('toggle');
+          }
+        };
+
         _createClass(AutoCompleteCustomElement, [{
           key: "showFooter",
           get: function get() {
@@ -161,6 +167,8 @@ System.register(["aurelia-framework", "aurelia-api", "../aurelia-autocomplete", 
           if (this.apiEndpoint) {
             this.apiEndpoint = this.apiEndpoint.getEndpoint(this.endpoint);
           }
+          this.dropdownToggle = $(this.dropdownToggle);
+          this.dropdownMenu = $(this.dropdownToggle.parent().find('.dropdown-menu')[0]);
         };
 
         AutoCompleteCustomElement.prototype.setFocus = function setFocus(value, event) {
@@ -236,6 +244,9 @@ System.register(["aurelia-framework", "aurelia-api", "../aurelia-autocomplete", 
               this.onSelect();
             }
           } else if (event.keyCode !== 37 && event.keyCode !== 39) {
+            if (this.results.length > 0) {
+              this.showDropdown();
+            }
             this.setFocus(true);
           }
 

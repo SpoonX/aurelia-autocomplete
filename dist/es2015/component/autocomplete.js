@@ -56,6 +56,12 @@ export let AutoCompleteCustomElement = (_dec = resolvedView('spoonx/auto-complet
     return visibility === 'always' || visibility === 'no-results' && this.value && this.value.length && (!this.results || !this.results.length);
   }
 
+  showDropdown() {
+    if (!this.dropdownMenu.hasClass('show')) {
+      this.dropdownToggle.dropdown('toggle');
+    }
+  }
+
   constructor(api, element) {
     this.justSelected = false;
     this.previousValue = null;
@@ -115,6 +121,8 @@ export let AutoCompleteCustomElement = (_dec = resolvedView('spoonx/auto-complet
     if (this.apiEndpoint) {
       this.apiEndpoint = this.apiEndpoint.getEndpoint(this.endpoint);
     }
+    this.dropdownToggle = $(this.dropdownToggle);
+    this.dropdownMenu = $(this.dropdownToggle.parent().find('.dropdown-menu')[0]);
   }
 
   setFocus(value, event) {
@@ -190,6 +198,9 @@ export let AutoCompleteCustomElement = (_dec = resolvedView('spoonx/auto-complet
         this.onSelect();
       }
     } else if (event.keyCode !== 37 && event.keyCode !== 39) {
+      if (this.results.length > 0) {
+        this.showDropdown();
+      }
       this.setFocus(true);
     }
 

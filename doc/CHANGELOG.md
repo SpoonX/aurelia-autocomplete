@@ -1,3 +1,13 @@
+<a name="3.1.0"></a>
+# [3.1.0](https://github.com/SpoonX/aurelia-autocomplete/compare/v3.0.0...v3.1.0) (2018-07-02)
+
+
+### Bug Fixes
+
+* **autocomplete:** show autocomplete results when user focuses input without clicking in it ([f1e9de9](https://github.com/SpoonX/aurelia-autocomplete/commit/f1e9de9))
+
+
+
 <a name="3.0.0"></a>
 # [3.0.0](https://github.com/SpoonX/aurelia-autocomplete/compare/v3.0.0-2...v3.0.0) (2018-06-20)
 

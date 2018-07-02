@@ -30,6 +30,8 @@ export declare class AutoCompleteCustomElement {
   
   // Simple property that maintains if this is the initial (first) request.
   initial: any;
+  dropdownToggle: any;
+  dropdownMenu: any;
   hasFocus: any;
   minInput: any;
   name: any;
@@ -52,6 +54,7 @@ export declare class AutoCompleteCustomElement {
   sort: any;
   criteria: any;
   showFooter: any;
+  showDropdown(): any;
   
   /**
      * Autocomplete constructor.

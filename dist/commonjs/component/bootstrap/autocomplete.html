@@ -1,6 +1,7 @@
 <template>
   <div class="dropdown open">
     <input
+      ref="dropdownToggle"
       name.bind="name"
       class="form-control dropdown-toggle"
       value.bind="value & debounce:debounce"
@@ -13,7 +14,6 @@
       keyup.trigger="handleKeyUp($event)"
       focus.trigger="setFocus(true, $event)"
       blur.trigger="setFocus(false, $event) & debounce:debounce"
-      aria-expanded="true"
     >
     </input>
 

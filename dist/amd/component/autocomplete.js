@@ -78,6 +78,12 @@ define(["exports", "aurelia-framework", "aurelia-api", "../aurelia-autocomplete"
   var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _class, _desc, _value, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13, _descriptor14, _descriptor15, _descriptor16, _descriptor17, _descriptor18, _descriptor19, _descriptor20;
 
   var AutoCompleteCustomElement = exports.AutoCompleteCustomElement = (_dec = (0, _aureliaViewManager.resolvedView)('spoonx/auto-complete', 'autocomplete'), _dec2 = (0, _aureliaFramework.inject)(_aureliaApi.Config, _aureliaPal.DOM.Element), _dec3 = (0, _aureliaFramework.bindable)({ defaultBindingMode: _aureliaFramework.bindingMode.twoWay }), _dec4 = (0, _aureliaFramework.bindable)({ defaultBindingMode: _aureliaFramework.bindingMode.twoWay }), _dec5 = (0, _aureliaFramework.bindable)({ defaultBindingMode: _aureliaFramework.bindingMode.twoWay }), _dec6 = (0, _aureliaFramework.computedFrom)('results', 'value'), _dec7 = (0, _aureliaFramework.computedFrom)('value'), _dec(_class = _dec2(_class = (_class2 = function () {
+    AutoCompleteCustomElement.prototype.showDropdown = function showDropdown() {
+      if (!this.dropdownMenu.hasClass('show')) {
+        this.dropdownToggle.dropdown('toggle');
+      }
+    };
+
     _createClass(AutoCompleteCustomElement, [{
       key: "showFooter",
       get: function get() {
@@ -148,6 +154,8 @@ define(["exports", "aurelia-framework", "aurelia-api", "../aurelia-autocomplete"
       if (this.apiEndpoint) {
         this.apiEndpoint = this.apiEndpoint.getEndpoint(this.endpoint);
       }
+      this.dropdownToggle = $(this.dropdownToggle);
+      this.dropdownMenu = $(this.dropdownToggle.parent().find('.dropdown-menu')[0]);
     };
 
     AutoCompleteCustomElement.prototype.setFocus = function setFocus(value, event) {
@@ -223,6 +231,9 @@ define(["exports", "aurelia-framework", "aurelia-api", "../aurelia-autocomplete"
           this.onSelect();
         }
       } else if (event.keyCode !== 37 && event.keyCode !== 39) {
+        if (this.results.length > 0) {
+          this.showDropdown();
+        }
         this.setFocus(true);
       }
 
